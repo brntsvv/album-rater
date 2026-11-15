@@ -1442,16 +1442,44 @@ $("qrReset").onclick = function() {
 };
 
 function slug(s){return ((s||"album").replace(/[^A-Za-zА-Яа-яЁё0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)||"album")}
+
 function download(name,blob){
  var a=document.createElement("a");
- a.href=URL.createObjectURL(blob);a.download=name;
- document.body.appendChild(a);a.click();a.remove();
- setTimeout(function(){URL.revokeObjectURL(a.href)},1500)}
-function doSaveLib(){
- download("библиотека-оценок.json",new Blob([JSON.stringify({app:"track-rater",v:13,albums:L},null,2)],{type:"application/json"}));
- var b=$("saveFileHome");
- if(b){b.textContent="Сохранено";setTimeout(function(){b.textContent="Сохранить"},1500)}
+ a.href=URL.createObjectURL(blob);
+ a.download=name;
+ a.target="_blank"; // Важно, чтобы Telegram не перехватывал ссылку и не открывал код
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+ setTimeout(function(){URL.revokeObjectURL(a.href)},1500)
 }
+
+async function doSaveLib(){
+  var dataStr = JSON.stringify({app:"track-rater",v:13,albums:L},null,2);
+  var blob = new Blob([dataStr], {type: "application/octet-stream"}); // octet-stream заставляет скачивать, а не открывать
+  var file = new File([blob], "ratepiece-backup.json", {type: "application/json"});
+  
+  var b=$("saveFileHome");
+  
+  // Пытаемся использовать нативный шаринг (идеально для iOS/Android)
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: 'Бэкап Ratepiece'
+      });
+      if(b){b.textContent="Готово";setTimeout(function(){b.textContent="Сохранить"},1500)}
+      return;
+    } catch (e) {
+      // Если пользователь отменил, идем дальше к скачиванию
+    }
+  }
+  
+  // Запасной вариант (для ПК или если шаринг не сработал)
+  download("ratepiece-backup.json", blob);
+  if(b){b.textContent="Сохранено";setTimeout(function(){b.textContent="Сохранить"},1500)}
+}
+
 $("saveFileHome").onclick=doSaveLib;
 function cleanTrack(t){
  if(!t||typeof t.t!=="string")return null;
