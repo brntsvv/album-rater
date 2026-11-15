@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#09090c" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#09090c" media="(prefers-color-scheme: light)">
+<title>Оценка альбомов</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#09090c;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.14);--edge:rgba(255,255,255,.24);--spec:rgba(255,255,255,.34);--sheen:rgba(255,255,255,.13);--shadow:rgba(0,0,0,.35);--tx:#f6f3fb;--mut:#bdb6cf;--track:rgba(255,255,255,.14);--tabon:rgba(255,255,255,.22);--pbg:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.8));--ptx:#16122a;--o:.6;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Manrope,system-ui,sans-serif;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+main{max-width:520px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top,0px)) 14px calc(40px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px}
+.card input,.card textarea{width:100%;background:none;border:0;border-bottom:1px solid var(--line);color:var(--tx);font:600 16px Manrope,sans-serif;padding:6px 0 10px;outline:none;border-radius:0}
+.card textarea{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:14px;min-height:220px;resize:vertical;font-weight:400;line-height:1.5}
+.card input:focus,.card textarea:focus{border-color:var(--mut)}
+.ttl{font-weight:800;font-size:17px;overflow-wrap:anywhere}
+.lbl{color:var(--mut);font-size:13px;margin:14px 0 0}
+.big{display:flex;align-items:baseline;gap:10px;margin-top:14px}
+.big b{font:800 60px/1 Unbounded,sans-serif;letter-spacing:-.03em}
+.big span{color:var(--mut);font-weight:600}
+.score{display:flex;align-items:baseline;gap:10px;margin-top:14px;background:none;border:0;padding:0;color:var(--tx);width:100%;cursor:pointer;text-align:left;font-family:inherit}
+.score b{font:800 60px/1 Unbounded,sans-serif;letter-spacing:-.03em}
+.score span{color:var(--mut);font-weight:600}
+.score i{margin-left:auto;font:600 13px Manrope,sans-serif;font-style:normal;color:var(--mut)}
+.score:focus-visible{outline:2px solid #a78bfa;outline-offset:4px;border-radius:8px}
+.sub{margin-top:6px;font-weight:600;color:var(--mut)}
+#stats{margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
+.back{background:none;border:0;color:var(--mut);font:600 14px Manrope,sans-serif;padding:8px 2px;margin-bottom:6px;cursor:pointer}
+.trk{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-top:8px;overflow:hidden}
+.hd{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;color:var(--tx);font:600 15px Manrope,sans-serif;padding:14px;text-align:left;cursor:pointer;min-height:56px}
+.hd .i{color:var(--mut);min-width:2ch;font-weight:600}
+.hd .t{flex:1;min-width:0;overflow-wrap:anywhere}
+.hd .t small{display:block;color:var(--mut);font-weight:600;font-size:12px;margin-top:3px}
+.bd{font:800 15px Unbounded,sans-serif;min-width:3.2ch;text-align:center;border-radius:10px;padding:6px 8px;background:var(--track);color:var(--mut)}
+.pn{padding:2px 14px 16px}
+.sl{margin-top:14px}
+.sl .h{display:flex;justify-content:space-between;font-weight:600;font-size:14px}
+.sl .h b{font:800 15px Unbounded,sans-serif}
+.tg{margin:0 10px 0 auto;background:var(--track);border:0;color:var(--mut);border-radius:8px;height:28px;padding:0 10px;font:700 12px Manrope,sans-serif;cursor:pointer}
+.tg:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.mb{height:10px;border-radius:5px;margin-top:8px;background:linear-gradient(90deg,var(--c) var(--p),var(--track) var(--p))}
+.ex{display:flex;justify-content:space-between;gap:12px;margin-top:14px;font-size:14px;font-weight:600}
+.ex span:first-child{color:var(--mut);white-space:nowrap}
+.ex span:last-child{text-align:right;overflow-wrap:anywhere}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:12px;border-radius:6px;margin:10px 0 0;display:block;background:linear-gradient(90deg,var(--c) var(--p),var(--track) var(--p));outline:none;touch-action:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid var(--c)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--c)}
+.hd:focus-visible,.btn:focus-visible,.back:focus-visible,input[type=range]:focus-visible{outline:2px solid var(--c,#a78bfa);outline-offset:2px}
+.bar{display:flex;gap:10px;margin-top:14px}
+.btn{flex:1;height:46px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:700 14px Manrope,sans-serif;cursor:pointer}
+.btn.p{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.btn:disabled{opacity:.4;cursor:default}
+select.btn{background:var(--card);color:var(--tx);border:1px solid var(--line);padding:0 14px;font:700 14px Manrope,sans-serif}
+select.btn:focus{outline:2px solid #a78bfa;outline-offset:2px}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tab{flex:1;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--mut);font:700 14px Manrope,sans-serif;cursor:pointer}
+.tab.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.rank{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.rank:last-child{border-bottom:0}
+.rank .n{color:var(--mut);font:700 14px Unbounded,sans-serif;min-width:2.2ch}
+.rank .info{flex:1;min-width:0}
+.rank .info b{display:block;font-weight:700;overflow-wrap:anywhere}
+.rank .info span{display:block;color:var(--mut);font-size:13px;font-weight:600;margin-top:2px}
+.rank .sc{font:800 16px Unbounded,sans-serif;min-width:2.5ch;text-align:right}
+#topYear{width:100%;height:46px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:700 15px Manrope,sans-serif;padding:0 14px;cursor:pointer}
+#topYear:focus{outline:2px solid #a78bfa;outline-offset:2px}
+#ov{position:fixed;inset:0;z-index:20;background:rgba(10,8,14,.94);overflow:auto;padding:calc(16px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px))}
+#ov .in{max-width:520px;margin:0 auto}
+#ov img{width:100%;height:auto;border-radius:14px;display:block}
+#ov .btn{background:#1d1926;color:#f1edf7;border-color:#2e2840}
+#ov .btn.p{background:#f1edf7;color:#14111a;border-color:#f1edf7}
+input[type=file]{display:none}
+/* ——— Liquid Glass ——— */
+html{background:var(--bg)}
+body{background:transparent}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(100% 55% at 50% 0%,#1d1d27,transparent 70%),#09090c}
+.card,.tabs,.btn,select.btn,#topYear{-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+.trk{-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%)}
+.card,.trk{background:linear-gradient(135deg,var(--sheen),transparent 48%),var(--card);border:1px solid var(--edge);box-shadow:inset 0 1px 0 var(--spec),inset 0 -1px 0 rgba(0,0,0,.08),0 10px 30px var(--shadow)}
+.card{border-radius:26px}
+.trk{border-radius:20px}
+.btn,select.btn,#topYear{background:linear-gradient(135deg,var(--sheen),transparent 55%),var(--card);border:1px solid var(--edge);border-radius:16px;box-shadow:inset 0 1px 0 var(--spec),0 6px 18px var(--shadow);transition:transform .15s ease}
+#searchInput{background:linear-gradient(135deg,var(--sheen),transparent 55%),var(--card)!important;border:1px solid var(--edge)!important;border-radius:16px!important;box-shadow:inset 0 1px 0 var(--spec);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px)}
+.btn.p{background:var(--pbg);color:var(--ptx);border-color:var(--edge)}
+.btn:active,.tab:active{transform:scale(.97)}
+.hd:active{background:var(--track)}
+.card textarea{background:rgba(255,255,255,.06)}
+.tabs{position:sticky;top:calc(8px + env(safe-area-inset-top,0px));z-index:6;gap:4px;padding:5px;border-radius:999px;background:linear-gradient(135deg,var(--sheen),transparent 55%),var(--card);border:1px solid var(--edge);box-shadow:inset 0 1px 0 var(--spec),0 10px 30px var(--shadow);margin-bottom:14px}
+.tab{height:38px;border:0;border-radius:999px;background:transparent;color:var(--mut);transition:background .2s,color .2s}
+.tab.on{background:var(--tabon);color:var(--tx);border:0;box-shadow:inset 0 1px 0 var(--spec),0 2px 8px var(--shadow)}
+.bd{border:1px solid var(--edge);box-shadow:inset 0 1px 0 var(--spec)}
+.tg{border:1px solid var(--line)}
+input[type=range]{height:14px;border-radius:7px;box-shadow:inset 0 1px 3px rgba(0,0,0,.3),0 0 0 1px var(--line)}
+input[type=range]::-webkit-slider-thumb{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff,rgba(255,255,255,.92) 55%,rgba(235,232,250,.88));border:1px solid rgba(255,255,255,.9);box-shadow:0 3px 12px rgba(0,0,0,.4),inset 0 -3px 6px rgba(0,0,0,.1),0 0 0 4px color-mix(in srgb,var(--c) 45%,transparent)}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff,rgba(255,255,255,.92) 55%,rgba(235,232,250,.88));border:1px solid rgba(255,255,255,.9);box-shadow:0 3px 12px rgba(0,0,0,.4),0 0 0 4px color-mix(in srgb,var(--c) 45%,transparent)}
+#ov{background:rgba(8,6,16,.55);-webkit-backdrop-filter:blur(30px) saturate(150%);backdrop-filter:blur(30px) saturate(150%)}
+#searchBar>*{min-width:0}
+#searchInput::placeholder{color:var(--mut);opacity:.85}
+#ov .btn{background:rgba(255,255,255,.14);color:#f6f3fb;border-color:rgba(255,255,255,.3)}
+#ov .btn.p{background:rgba(255,255,255,.92);color:#16122a;border-color:#fff}
+/* ——— iOS continuous corners (squircle) ——— */
+:root{--r-xl:32px;--r-l:26px;--r-m:20px;--r-s:14px;--r-xs:10px}
+.card,#ov img{border-radius:var(--r-xl)}
+.trk,.pc{border-radius:var(--r-l)}
+.btn,select.btn,#topYear,.card textarea,#searchInput,.bub,.ps{border-radius:var(--r-m)}
+#searchInput{border-radius:var(--r-m)!important}
+.bd,.pill,.year-segs .seg,.tab{border-radius:var(--r-s)}
+.tg{border-radius:var(--r-xs)}
+.tabs{border-radius:999px}
+@supports (corner-shape: squircle){
+ :root{--r-xl:40px;--r-l:32px;--r-m:24px;--r-s:16px;--r-xs:12px}
+ .card,.trk,.pc,.btn,select.btn,#topYear,#searchInput,.card textarea,.bd,.tg,#ov img,.bub,.ps,.pill,.year-segs .seg,.tab{
+  corner-shape:squircle;
+ }
+}
+@supports (corner-shape: superellipse(0.6)){
+ .card,.trk,.pc,.btn,select.btn,#topYear,#searchInput,.card textarea,.bd,.tg,#ov img,.bub,.ps,.pill,.year-segs .seg,.tab{
+  corner-shape:superellipse(0.6);
+ }
+}
+/* ——— Цвет альбома, кольцо, подиум, движения ——— */
+body{font-variant-numeric:tabular-nums}
+#hdr{background:radial-gradient(120% 90% at 0% 0%,hsl(var(--ah,265) 70% 55% / .30),transparent 62%),linear-gradient(135deg,var(--sheen),transparent 48%),var(--card)}
+.score{align-items:center;gap:18px}
+.ring{position:relative;width:128px;height:128px;flex:none}
+.ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.ring circle{fill:none;stroke-width:9;stroke-linecap:round}
+.ring .rt{stroke:var(--track)}
+.ring .rp{stroke-dasharray:326.7;stroke-dashoffset:326.7;transition:stroke-dashoffset .7s cubic-bezier(.2,.8,.2,1),stroke .4s;filter:drop-shadow(0 0 7px rgba(255,255,255,.25))}
+.score .ring b{position:absolute;inset:0;display:grid;place-items:center;font:800 36px/1 Unbounded,sans-serif;letter-spacing:0}
+.rl{margin-left:auto;text-align:right}
+.rl em{display:block;font-style:normal;color:var(--mut);font-weight:600;font-size:13px;margin-bottom:4px}
+.rl i{margin:0}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;background:currentColor;box-shadow:0 0 12px currentColor}
+.pn.in{animation:pnIn .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes pnIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.pn.in{animation:none}.ring .rp{transition:none}}
+.rw{position:relative;padding:0 2px}
+.bub{position:absolute;bottom:calc(100% + 8px);left:calc(15px + (100% - 30px) * var(--f,0));transform:translateX(-50%) translateY(6px) scale(.9);opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;padding:6px 12px;border-radius:12px;font:800 13px Unbounded,sans-serif;background:rgba(255,255,255,.94);color:#16122a;box-shadow:0 6px 18px rgba(0,0,0,.45);white-space:nowrap;max-width:90vw;text-align:center;z-index:2}
+.bub.on{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+.bub small{display:block;font:700 10px Manrope,sans-serif;opacity:.72;margin-top:1px;letter-spacing:.01em}
+.ticks{display:flex;justify-content:space-between;padding:0 13px;margin-top:6px;pointer-events:none}
+.ticks i{width:2px;height:6px;border-radius:1px;background:rgba(255,255,255,.18);display:block}
+.ticks i.on{background:color-mix(in srgb,var(--c) 70%,rgba(255,255,255,.35))}
+.ends{display:flex;justify-content:space-between;margin-top:4px;padding:0 2px;pointer-events:none}
+.ends span{font:600 11px Manrope,sans-serif;color:var(--mut);opacity:.75;letter-spacing:.02em}
+.sl.off .ticks,.sl.off .ends{opacity:.4}
+.pod{display:flex;align-items:flex-end;gap:8px;margin-bottom:10px}
+.pc{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px 12px;border:1px solid var(--edge);border-radius:var(--r-l);color:var(--tx);font-family:inherit;text-align:center;cursor:pointer;background:radial-gradient(120% 90% at 50% 0%,hsl(var(--ah,265) 70% 55% / .30),transparent 72%),var(--card);box-shadow:inset 0 1px 0 var(--spec)}
+.pc.p1{min-height:210px}.pc.p2{min-height:178px}.pc.p3{min-height:156px}
+.pm{font:800 22px Unbounded,sans-serif}
+.pt{font-weight:700;font-size:13px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.pa{color:var(--mut);font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;max-width:100%;white-space:nowrap}
+.ps{margin-top:auto;font:800 15px Unbounded,sans-serif;padding:5px 11px;border-radius:12px;color:#fff;border:1px solid var(--edge)}
+/* ——— Финальная полировка ——— */
+.ah{display:flex;gap:16px;align-items:center}
+.at{min-width:0}
+.at small{display:block;color:var(--mut);font-weight:600;font-size:13px}
+.at .ttl{font-size:23px;line-height:1.18;margin:3px 0;letter-spacing:-.015em}
+.ring::before{content:"";position:absolute;inset:14px;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.13),rgba(255,255,255,.02));box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+.bg::after{content:"";position:absolute;inset:0;opacity:0;transition:opacity .7s;background:radial-gradient(100% 50% at 15% 0%,hsl(var(--ahp,265) 75% 48% / .30),transparent 70%),radial-gradient(80% 40% at 100% 100%,hsl(calc(var(--ahp,265) + 50) 70% 45% / .16),transparent 70%)}
+html.tint .bg::after{opacity:1}
+.enter{animation:sIn .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes sIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fresh .trk,.fresh .rank,.fresh .pc{animation:rowIn .5s both cubic-bezier(.2,.8,.2,1)}
+@keyframes rowIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.fresh .trk:nth-child(2),.fresh .rank:nth-child(2),.fresh .pc:nth-child(2){animation-delay:.05s}
+.fresh .trk:nth-child(3),.fresh .rank:nth-child(3),.fresh .pc:nth-child(3){animation-delay:.1s}
+.fresh .trk:nth-child(4),.fresh .rank:nth-child(4){animation-delay:.15s}
+.fresh .trk:nth-child(5),.fresh .rank:nth-child(5){animation-delay:.2s}
+.fresh .trk:nth-child(6),.fresh .rank:nth-child(6){animation-delay:.25s}
+.fresh .trk:nth-child(n+7),.fresh .rank:nth-child(n+7){animation-delay:.3s}
+@media (prefers-reduced-motion:reduce){.enter,.fresh .trk,.fresh .rank,.fresh .pc{animation:none}}
+.hd .t{font-size:16px;letter-spacing:-.01em}
+.score .ring{color:var(--tx)}
+.hd .t small+span{display:block;margin:2px 0}
+
+/* ——— Design polish ——— */
+:root{--mut:#a8a1b8}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font:700 12px Manrope,sans-serif;color:var(--mut);background:rgba(255,255,255,.06);border:1px solid var(--line);letter-spacing:.01em}
+.pill b{color:var(--tx);font:800 13px Unbounded,sans-serif}
+.home-ttl{font-size:28px;letter-spacing:-.025em;line-height:1.15}
+.hd{padding:16px 14px;min-height:64px;transition:background .15s,transform .15s}
+.hd:active{transform:scale(.985)}
+.bd{min-width:3.6ch;padding:7px 10px;font-size:16px;border-radius:12px}
+.bd.on{box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 0 18px hsla(var(--bh,140),70%,50%,.35)}
+.hd .t small{font-size:12px;opacity:.9}
+.hd .t .name{display:block;font-weight:700;font-size:16px;letter-spacing:-.01em;margin:2px 0}
+.hd .t .yr{opacity:.75}
+.trk.rated{box-shadow:inset 3px 0 0 hsl(var(--ac,140) 70% 55%),inset 0 1px 0 var(--spec),0 10px 30px var(--shadow)}
+input[type=range]{height:14px;border-radius:7px;box-shadow:inset 0 1px 3px rgba(0,0,0,.3),0 0 0 1px var(--line);transition:filter .15s,opacity .15s}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.08)}
+input[type=range]:active::-moz-range-thumb{transform:scale(1.08)}
+input[type=range]:disabled{filter:grayscale(.85) saturate(.3);opacity:.45}
+.sl.off .h span,.sl.off .h b{opacity:.45}
+.ex.dotline{align-items:center;gap:10px}
+.ex.dotline .left{display:flex;align-items:center;gap:8px;color:var(--mut);white-space:nowrap;min-width:0}
+.ex.dotline .left .dot{flex:none}
+.ex.dotline .val{margin-left:auto;text-align:right;overflow-wrap:anywhere}
+.year-segs{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.year-segs .seg{height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--mut);font:700 13px Manrope,sans-serif;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.year-segs .seg.on{background:var(--tabon);color:var(--tx);border-color:var(--edge);box-shadow:inset 0 1px 0 var(--spec)}
+.pc.p1{box-shadow:inset 0 1px 0 var(--spec),0 12px 36px hsla(var(--ah,265),70%,50%,.28),0 0 0 1px hsla(var(--ah,265),70%,60%,.2)}
+.pc.p2,.pc.p3{opacity:.96}
+.pc.p2{filter:saturate(.92)}
+.pc.p3{filter:saturate(.85);opacity:.92}
+.rank .n{opacity:.55;font-size:13px}
+.rank .sc{font-size:17px}
+.rank{border-bottom-color:rgba(255,255,255,.06);padding:14px 0}
+.empty{text-align:center;padding:28px 16px}
+.empty .ttl{font-size:16px;margin-bottom:6px}
+.empty .lbl{margin:0}
+.section-enter{animation:sIn .35s cubic-bezier(.2,.8,.2,1)}
+.btn.pulse{animation:btnPulse .45s ease}
+@keyframes btnPulse{0%{transform:scale(1)}40%{transform:scale(.96)}100%{transform:scale(1)}}
+#hdr .score .rl em{letter-spacing:.02em;text-transform:uppercase;font-size:11px;opacity:.8}
+
+/* ——— Новые стили для полного дизайна ——— */
+.search-wrap{position:relative;display:flex;align-items:center;flex:1}
+#searchInput{width:100%;padding-right:36px}
+.search-clear{position:absolute;right:12px;background:none;border:0;color:var(--mut);font-size:16px;cursor:pointer;padding:4px;display:none}
+.search-clear.on{display:block}
+
+.tabs{position:sticky;top:calc(8px + env(safe-area-inset-top,0px));z-index:6;display:flex;gap:4px;padding:5px;border-radius:999px;background:linear-gradient(135deg,var(--sheen),transparent 55%),var(--card);border:1px solid var(--edge);box-shadow:inset 0 1px 0 var(--spec),0 10px 30px var(--shadow);margin-bottom:14px}
+.tab{flex:1;height:38px;border:0;border-radius:999px;background:transparent;color:var(--mut);font:700 14px Manrope,sans-serif;cursor:pointer;transition:background .2s,color .2s;position:relative;z-index:1}
+.tab.on{background:var(--tabon);color:var(--tx);box-shadow:inset 0 1px 0 var(--spec),0 2px 8px var(--shadow)}
+
+/* Кастомный селект с шевроном */
+.select-wrap{position:relative;flex:1;display:flex}
+.select-wrap select{width:100%;appearance:none;padding-right:32px;text-overflow:ellipsis}
+.select-wrap::after{content:"";position:absolute;right:14px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-right:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+
+/* Подиум: корона для 1 места */
+.pc.p1{position:relative}
+.pc.p1::before{content:"👑";position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:16px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+
+/* Спарклайн кривой релиза */
+.sparkline{width:100%;height:36px;margin-top:12px;display:block}
+
+/* Золотой/платиновый перелив для оценок 90+ */
+.bd.elite, .ps.elite{background:linear-gradient(135deg,rgba(255,215,0,.45),rgba(255,140,0,.35))!important;border-color:rgba(255,215,0,.8)!important;color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.5);animation:eliteGlow 3s ease-in-out infinite alternate}
+@keyframes eliteGlow{0%{box-shadow:0 0 10px rgba(255,215,0,.2)}100%{box-shadow:0 0 20px rgba(255,215,0,.5)}}
+
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<main>
+<div class="tabs" id="tabs">
+  <button class="tab on" id="tabHome">Альбомы</button>
+  <button class="tab" id="tabTops">Топ</button>
+</div>
+<section id="home">
+  <div class="card">
+    <div class="ttl home-ttl">Мои альбомы</div>
+    <div class="pills" id="hCnt"></div>
+  </div>
+  <div class="bar"><button class="btn p" id="add">Добавить альбом</button></div>
+  <div class="bar"><button class="btn" id="loadLib">Загрузить библиотеку</button></div>
+  <div class="bar" id="searchBar" hidden style="gap:8px">
+    <div class="search-wrap">
+      <input id="searchInput" placeholder="Поиск по артисту или альбому..." style="flex:1;background:var(--card);border:1px solid var(--line);border-radius:16px;color:var(--tx);font:600 14px Manrope,sans-serif;padding:0 14px;height:46px;outline:none;" aria-label="Поиск альбомов">
+      <button class="search-clear" id="searchClear" aria-label="Очистить поиск">✕</button>
+    </div>
+    <div class="select-wrap">
+      <select id="sort" class="btn" style="height:46px">
+        <option value="score">По баллу ↓</option>
+        <option value="year">По году ↓</option>
+        <option value="artist">По артисту</option>
+        <option value="title">По названию</option>
+        <option value="added">По добавлению</option>
+      </select>
+    </div>
+  </div>
+  <p class="lbl" id="msg"></p>
+  <div id="albums"></div>
+</section>
+<section id="tops" hidden>
+  <div class="card">
+    <div class="ttl home-ttl">Топ</div>
+    <p class="lbl" style="margin-top:12px;margin-bottom:8px">Год выпуска</p>
+    <div id="yearSegs" class="year-segs" hidden></div>
+    <select id="topYear" aria-label="Год выпуска">
+      <option value="">Все годы</option>
+    </select>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="ttl" style="font-size:15px;margin-bottom:8px">Топ альбомов</div>
+    <div id="podium"></div>
+    <div id="topAlbums"></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="ttl" style="font-size:15px;margin-bottom:8px">Топ треков</div>
+    <div id="topTracks"></div>
+  </div>
+</section>
+<section id="setup" hidden>
+  <div class="card" style="display:flex;flex-direction:column;gap:12px">
+    <input id="artist" placeholder="Артист" aria-label="Артист" style="background:linear-gradient(135deg,var(--sheen),transparent 55%),var(--card);border:1px solid var(--edge);border-radius:16px;padding:0 14px;height:46px">
+    <input id="title" placeholder="Название альбома" aria-label="Название альбома" style="background:linear-gradient(135deg,var(--sheen),transparent 55%),var(--card);border:1px solid var(--edge);border-radius:16px;padding:0 14px;height:46px">
+    <input id="year" placeholder="Год" aria-label="Год выпуска" inputmode="numeric" maxlength="4" style="background:linear-gradient(135deg,var(--sheen),transparent 55%),var(--card);border:1px solid var(--edge);border-radius:16px;padding:0 14px;height:46px;max-width:140px">
+    <p class="lbl" style="margin-top:4px">Вставь треклист, по одному треку на строку. Номера и время уберутся сами.</p>
+    <textarea id="list" aria-label="Треклист" placeholder="1. Intro&#10;2. Первый трек&#10;3. Второй трек" style="background:rgba(255,255,255,.05);border:1px solid var(--edge);border-radius:16px;margin-top:0"></textarea>
+  </div>
+  <div class="bar"><button class="btn" id="cancel">Отмена</button><button class="btn p" id="lock">Оценить</button></div>
+</section>
+<section id="view" hidden>
+  <button class="back" id="back">← Все альбомы</button>
+  <div class="card" id="hdr">
+    <div class="ah"><div class="at"><small id="aart"></small><div id="aname" class="ttl"></div><small id="ayr"></small></div></div>
+    <button class="score" id="tgl" aria-expanded="false" aria-controls="stats"><span class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="rt" cx="60" cy="60" r="52"/><circle class="rp" id="rp" cx="60" cy="60" r="52"/></svg><b id="total">–</b></span><span class="rl"><em>Общий балл</em><i id="chev">Подробнее</i></span></button>
+    <div id="stats" hidden></div>
+  </div>
+  <div id="rows"></div>
+  <div class="bar"><button class="btn p" id="card" disabled>Карточка альбома</button></div>
+  <div class="bar"><button class="btn" id="saveFile">Сохранить</button><button class="btn" id="edit">Изменить треклист</button></div>
+  <div class="bar"><button class="btn" id="resetAlb">Сброс</button><button class="btn" id="del">Удалить альбом</button></div>
+</section>
+</main>
+<input type="file" id="fileIn" accept=".json,application/json">
+<div id="ov" hidden role="dialog" aria-modal="true" aria-label="Карточка альбома"><div class="in"><img id="img" alt="Карточка альбома"><p class="lbl" id="hint" style="color:#8f87a3">Если сохранение не сработает, нажми и удерживай картинку.</p><div class="bar"><button class="btn p" id="sv">Сохранить</button><button class="btn" id="sh">Поделиться</button></div><div class="bar"><button class="btn" id="cl">Закрыть</button></div></div></div>
+<script>
+var C=["Текст","Структура","Реализация","Продакшн","Индивидуальность / Харизма","Атмосфера / Вайб"];
+var W=[1,1,1,1,1,2];
+var VL=["","Ужасно","Очень плохо","Плохо","Ниже среднего","Средне","Неплохо","Хорошо","Отлично","Великолепно","Шедевр"];
+function vLabel(v){var n=Math.round(+v);return VL[n]||""}
+var KEY="library1",L=[],S=null,open=-1,refs=[],editing=false,sortMode="score",searchQuery="";
+var saveTimer=null;
+function $(id){return document.getElementById(id)}
+function uid(){return Date.now()+Math.floor(Math.random()*1000)}
+function same(a,b){return String(a||"").trim().toLowerCase()===String(b||"").trim().toLowerCase()}
+function flushSave(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null}try{localStorage.setItem(KEY,JSON.stringify(L))}catch(e){}}
+function save(){if(saveTimer)clearTimeout(saveTimer);saveTimer=setTimeout(flushSave,200)}
+window.addEventListener("beforeunload",flushSave);
+document.addEventListener("visibilitychange",function(){if(document.hidden)flushSave()});
+
+function displayName(a){
+  if(!a)return "Без названия";
+  var art=(a.artist||"").trim(), tit=(a.title||a.album||"").trim();
+  if(art&&tit)return art+" — "+tit;
+  return tit||art||"Без названия";
+}
+function ensureFields(a){
+  if(!a)return;
+  a.artist=a.artist||"";
+  a.title=a.title||"";
+  a.year=parseYear(a.year);
+  a.album=displayName(a);
+}
+function parseYear(v){
+  v=String(v||"").trim();
+  if(!v)return null;
+  var y=+v;
+  return (y>=1900&&y<=2100)?y:null;
+}
+
+/* ——— загрузка библиотеки при открытии ——— */
+(function(){
+ try{var raw=localStorage.getItem(KEY),a=raw&&JSON.parse(raw);if(Array.isArray(a))L=a}catch(e){}
+ L.forEach(function(a){
+  if(!a.id)a.id=uid();
+  ensureFields(a);
+  a.tracks.forEach(function(t){
+   if(!Array.isArray(t.v)||t.v.length!==C.length){t.v=C.map(function(){return 5});t.done=false}
+   X(t);
+  });
+ });
+})();
+
+var ACC=265;
+function albumHue(a){var s=((a.artist||"")+"|"+(a.title||a.album||"")).toLowerCase(),h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h%360}
+function col(i){return "hsl("+((ACC+i*14)%360)+" 76% 64%)"}
+function X(t){if(!Array.isArray(t.x)||t.x.length!==6)t.x=[false,false,false,false,false,false];return t.x}
+// sc() возвращает 0-100. raw = взвешенное среднее по активным критериям в 1-10.
+function scExact(t){
+  var x=X(t),s=0,w=0;
+  t.v.forEach(function(v,k){if(!x[k]){s+=v*W[k];w+=W[k]}});
+  return w?(s/w/10*100):0
+}
+function sc(t){
+  return Math.round(scExact(t))
+}
+function fv(v){return String(v)}
+// единая палитра баллов: фиолетовый → бирюзовый → золотой
+function hue(n){n=Math.max(0,Math.min(100,n));if(n<=40)return 262;if(n<=70)return Math.round(262-(n-40)/30*86);return Math.round(176-(n-70)/30*130)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function parse(txt){return txt.split(/\r?\n/).map(function(l){
+ return l.replace(/^\s*\d{1,3}\s*[.)\]\-–—:]\s*/,"").replace(/^\s*0\d\s+/,"").replace(/\s+[\(\[]?\d{1,2}:\d{2}[\)\]]?\s*$/,"").trim()}).filter(Boolean)}
+function done(a){return a.tracks.filter(function(t){return t.done})}
+function albScoreExact(a){var r=done(a);return r.length?(r.reduce(function(s,t){return s+scExact(t)},0)/r.length):null}
+function albScore(a){var v=albScoreExact(a);return v!==null?Math.round(v):null}
+function paintBadge(b,n){if(n===null){b.textContent="–";b.style.background="";b.style.color="";b.style.borderColor="";b.classList.remove("on","elite");b.style.removeProperty("--bh")}else{var h=hue(n);b.textContent=n;b.style.background="hsl("+h+" 75% 50% / .38)";b.style.borderColor="hsl("+h+" 85% 66% / .65)";b.style.color="hsl("+h+" 95% 88%)";b.style.setProperty("--bh",h);b.classList.add("on");b.classList.toggle("elite",n>=90)}}
+function show(id){
+  ["home","setup","view","tops"].forEach(function(s){$(s).hidden=s!==id});
+  $("tabs").hidden=id==="setup"||id==="view";
+  $("tabHome").classList.toggle("on",id==="home");
+  $("tabTops").classList.toggle("on",id==="tops");
+  if($("msg"))$("msg").textContent="";
+  document.documentElement.classList.toggle("tint",id==="view");
+  var el=$(id);
+  if(el&&curSec!==id){
+   el.classList.remove("enter","fresh");void el.offsetWidth;el.classList.add("enter","fresh");
+   clearTimeout(freshT);freshT=setTimeout(function(){el.classList.remove("enter","fresh")},1000)}
+  curSec=id;
+  window.scrollTo(0,0);
+}
+var curSec=null,freshT=null;
+function msg(t){$("msg").textContent=t}
+// средние по критериям — в шкале 1-10 (те же единицы, что у слайдеров)
+function bars(tr){var h="";
+ C.forEach(function(name,k){var s=0,n=0;
+  tr.forEach(function(t){if(!X(t)[k]){s+=t.v[k];n++}});
+  if(!n)return;var a=s/n;
+  h+='<div class="sl" style="--c:'+col(k)+';--p:'+((a-1)/9*100)+'%"><div class="h"><span>'+name+'</span><b>'+Math.round(a)+'</b></div><div class="mb"></div></div>'});
+ return h}
+function ex(l,t){return '<div class="ex"><span>'+l+'</span><span>'+esc(t)+'</span></div>'}
+function pick(arr,f){var b=arr[0],w=arr[0];arr.forEach(function(x){if(f(x)>f(b))b=x;if(f(x)<f(w))w=x});return[b,w]}
+
+/* ——— главная ——— */
+function sortedList(){
+  var list=L.slice();
+  if(sortMode==="score"){
+    list.sort(function(a,b){var sa=albScore(a),sb=albScore(b);if(sa===null&&sb===null)return 0;if(sa===null)return 1;if(sb===null)return -1;return sb-sa});
+  }else if(sortMode==="year"){
+    list.sort(function(a,b){var ya=a.year,yb=b.year;if(ya==null&&yb==null)return 0;if(ya==null)return 1;if(yb==null)return -1;return yb-ya});
+  }else if(sortMode==="artist"){
+    list.sort(function(a,b){return (a.artist||"").localeCompare(b.artist||"","ru",{sensitivity:"base"})|| (a.title||"").localeCompare(b.title||"","ru",{sensitivity:"base"})});
+  }else if(sortMode==="title"){
+    list.sort(function(a,b){return (a.title||a.album||"").localeCompare(b.title||b.album||"","ru",{sensitivity:"base"})});
+  }else if(sortMode==="added"){
+    list.sort(function(a,b){return (b.id||0)-(a.id||0)});
+  }
+  return list;
+}
+function home(){
+ S=null;show("home");
+ var totalTracks=0;
+ L.forEach(function(a){totalTracks+=a.tracks.length});
+ var hc=$("hCnt");
+ hc.innerHTML='<span class="pill"><b>'+L.length+'</b> альбомов</span>'+(totalTracks?'<span class="pill"><b>'+totalTracks+'</b> треков</span>':'');
+ $("searchBar").hidden=!L.length;
+ $("sort").value=sortMode;
+ updateSearchUI();
+ var box=$("albums");box.innerHTML="";box.classList.add("fresh");
+ 
+ var list = sortedList();
+ if(searchQuery.trim()){
+  var q = searchQuery.trim().toLowerCase();
+  list = list.filter(function(a){
+   var art = (a.artist||"").toLowerCase();
+   var tit = (a.title||a.album||"").toLowerCase();
+   var disp = displayName(a).toLowerCase();
+   return art.indexOf(q)>=0 || tit.indexOf(q)>=0 || disp.indexOf(q)>=0;
+  });
+ }
+
+ if(!L.length){
+  box.innerHTML='<div class="empty"><div class="ttl">Пока тихо</div><p class="lbl">Добавь первый альбом или загрузи библиотеку из файла</p></div>';
+  return;
+ }
+ if(!list.length){
+  box.innerHTML='<div class="empty"><div class="ttl">Ничего не найдено</div><p class="lbl">По запросу «'+esc(searchQuery)+'»</p></div>';
+  return;
+ }
+
+ list.forEach(function(a){
+  var scn=albScore(a);
+  var w=document.createElement("div");w.className="trk"+(scn!==null?" rated":"");
+  if(scn!==null)w.style.setProperty("--ac",hue(scn));
+  var h=document.createElement("button");h.className="hd";
+  var t=document.createElement("span");t.className="t";
+  if(a.artist){var art=document.createElement("small");art.textContent=a.artist;t.appendChild(art)}
+  var main=document.createElement("span");main.className="name";main.textContent=a.title||a.album||"Без названия";t.appendChild(main);
+  if(a.year){var yr=document.createElement("small");yr.className="yr";yr.textContent=a.year;t.appendChild(yr)}
+  var b=document.createElement("span");b.className="bd";paintBadge(b,scn);
+  h.append(t,b);h.onclick=function(){openAlbum(a)};w.appendChild(h);box.appendChild(w)})}
+$("sort").onchange=function(){sortMode=this.value;home()};
+function updateSearchUI(){
+  $("searchInput").value=searchQuery;
+  $("searchClear").classList.toggle("on",Boolean(searchQuery));
+}
+$("searchInput").oninput=function(){searchQuery=this.value;updateSearchUI();home()};
+$("searchClear").onclick=function(){searchQuery="";updateSearchUI();home();$("searchInput").focus()};
+
+/* ——— топ ——— */
+var topYearFilter="",lastYearsKey="";
+function availableYears(){
+  var ys={};
+  L.forEach(function(a){if(a.year)ys[a.year]=1});
+  return Object.keys(ys).map(Number).sort(function(a,b){return b-a});
+}
+function fillYearSelect(){
+  var sel=$("topYear");
+  var segs=$("yearSegs");
+  var years=availableYears();
+  var key=years.join(",");
+  if(topYearFilter&&years.indexOf(+topYearFilter)<0)topYearFilter="";
+  // segments when few years
+  if(years.length>0&&years.length<=6){
+    segs.hidden=false;sel.hidden=true;
+    if(key!==lastYearsKey){
+      lastYearsKey=key;
+      var html='<button type="button" class="seg'+(topYearFilter?"":" on")+'" data-y="">Все</button>';
+      years.forEach(function(y){html+='<button type="button" class="seg'+(String(topYearFilter)===String(y)?" on":"")+'" data-y="'+y+'">'+y+'</button>'});
+      segs.innerHTML=html;
+    }else{
+      Array.prototype.forEach.call(segs.querySelectorAll(".seg"),function(btn){
+        btn.classList.toggle("on",btn.getAttribute("data-y")===String(topYearFilter));
+      });
+    }
+  }else{
+    segs.hidden=true;sel.hidden=false;
+    if(key!==lastYearsKey){
+      lastYearsKey=key;
+      var html='<option value="">Все годы</option>';
+      years.forEach(function(y){html+='<option value="'+y+'">'+y+'</option>'});
+      sel.innerHTML=html;
+    }
+    sel.value=topYearFilter;
+  }
+}
+function renderTops(){
+  show("tops");
+  fillYearSelect();
+  var yf=topYearFilter?+topYearFilter:null;
+
+  var albums=L.filter(function(a){
+    if(albScore(a)===null)return false;
+    if(yf&&a.year!==yf)return false;
+    return true;
+  }).sort(function(a,b){return albScore(b)-albScore(a)}).slice(0,50);
+
+  var tracks=[];
+  L.forEach(function(a){
+    if(yf&&a.year!==yf)return;
+    done(a).forEach(function(t){tracks.push({t:t,a:a,score:sc(t)})});
+  });
+  tracks.sort(function(x,y){return y.score-x.score});
+  if(tracks.length>50)tracks.length=50;
+
+  var abox=$("topAlbums");abox.innerHTML="";
+  var usePod=albums.length>=3,pbox=$("podium");pbox.innerHTML="";
+  if(usePod){
+    var pod=document.createElement("div");pod.className="pod";
+    [1,0,2].forEach(function(ix){
+      var a=albums[ix],n=albScore(a),pc=document.createElement("button");
+      pc.className="pc p"+(ix+1);pc.style.setProperty("--ah",albumHue(a));
+      pc.innerHTML='<span class="pm">'+(ix+1)+'</span><span class="pt">'+esc(a.title||a.album||"Без названия")+'</span><span class="pa">'+esc(a.artist||"")+'</span><span class="ps" style="background:hsl('+hue(n)+' 75% 50% / .38);border-color:hsl('+hue(n)+' 85% 66% / .65);color:hsl('+hue(n)+' 95% 88%)">'+n+'</span>';
+      pc.onclick=function(){openAlbum(a)};
+      pod.appendChild(pc)});
+    pbox.appendChild(pod)}
+  abox.classList.add("fresh");
+  if(!albums.length){abox.innerHTML='<div class="empty"><div class="ttl">Нет альбомов</div><p class="lbl">Пока нет оценённых альбомов'+(yf?" за "+yf:"")+'</p></div>'}
+  else albums.forEach(function(a,i){
+    if(usePod&&i<3)return;
+    var d=document.createElement("div");d.className="rank";
+    var scn=albScore(a);
+    d.innerHTML='<span class="n">'+(i+1)+'</span>'+'<div class="info"><b>'+esc(a.title||a.album||"Без названия")+'</b><span>'+esc([a.artist,a.year].filter(Boolean).join(" · "))+'</span></div><span class="sc" style="color:hsl('+hue(scn)+' 78% 64%)">'+scn+'</span>';
+    d.onclick=function(){openAlbum(a)};
+    abox.appendChild(d);
+  });
+
+  var tbox=$("topTracks");tbox.innerHTML="";tbox.classList.add("fresh");
+  if(!tracks.length){tbox.innerHTML='<div class="empty"><div class="ttl">Нет треков</div><p class="lbl">Пока нет оценённых треков'+(yf?" за "+yf:"")+'</p></div>'}
+  else tracks.forEach(function(x,i){
+    var d=document.createElement("div");d.className="rank";
+    d.innerHTML='<span class="n">'+(i+1)+'</span>'+'<div class="info"><b>'+esc(x.t.t)+'</b><span>'+esc(displayName(x.a)+(x.a.year?" · "+x.a.year:""))+'</span></div><span class="sc" style="color:hsl('+hue(x.score)+' 78% 64%)">'+x.score+'</span>';
+    d.onclick=function(){openAlbum(x.a)};
+    tbox.appendChild(d);
+  });
+}
+$("tabHome").onclick=function(){home()};
+$("tabTops").onclick=function(){renderTops()};
+$("topYear").onchange=function(){topYearFilter=this.value;lastYearsKey="";renderTops()};
+$("yearSegs").onclick=function(e){
+  var btn=e.target.closest(".seg");if(!btn)return;
+  topYearFilter=btn.getAttribute("data-y")||"";
+  lastYearsKey="";
+  renderTops();
+};
+
+/* ——— ввод треклиста ——— */
+$("add").onclick=function(){S=null;editing=false;$("artist").value="";$("title").value="";$("year").value="";$("list").value="";show("setup")};
+$("cancel").onclick=function(){if(editing&&S)renderAlbum();else home()};
+$("lock").onclick=function(){
+ var names=parse($("list").value);if(!names.length){$("list").focus();return}
+ var art=$("artist").value.trim(), tit=$("title").value.trim(), yr=parseYear($("year").value);
+ if(!tit&&!art){$("title").focus();return}
+ var old={};if(editing&&S)S.tracks.forEach(function(t){old[t.t]=t});
+ var tr=names.map(function(n){return old[n]||{t:n,v:[5,5,5,5,5,5],done:false}});
+ if(editing&&S){S.artist=art;S.title=tit;S.year=yr;S.album=displayName(S);S.tracks=tr}
+ else{S={id:uid(),artist:art,title:tit,year:yr,album:"",tracks:tr};S.album=displayName(S);L.unshift(S)}
+ editing=false;open=-1;save();renderAlbum()};
+
+/* ——— альбом ——— */
+function openAlbum(a){S=a;open=-1;scoreShown=null;renderAlbum()}
+var scoreShown=null,scoreRaf=0,animOpen=-1;
+function setScore(n){
+ var rp=$("rp"),b=$("total");
+ cancelAnimationFrame(scoreRaf);
+ if(n===null){b.textContent="–";rp.style.strokeDashoffset=326.7;scoreShown=null;return}
+ rp.style.stroke="hsl("+hue(n)+" 78% 62%)";
+ rp.style.strokeDashoffset=326.7*(1-n/100);
+ var from=scoreShown===null?0:scoreShown;scoreShown=n;
+ var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+ if(reduce||from===n){b.textContent=n;return}
+ var t0=null;
+ function step(ts){if(t0===null)t0=ts;var k=Math.min(1,(ts-t0)/650),e=1-Math.pow(1-k,3);b.textContent=Math.round(from+(n-from)*e);if(k<1)scoreRaf=requestAnimationFrame(step)}
+ scoreRaf=requestAnimationFrame(step)}
+function stats(){
+ var r=done(S),tot=albScore(S);
+ setScore(tot);
+ $("card").disabled=!r.length;
+ $("resetAlb").disabled=!r.length;
+ if(!$("stats").hidden)fillStats()}
+function fillStats(){
+ var box=$("stats"),r=done(S);
+ if(!r.length){box.innerHTML='<p class="lbl">Пока нет оценённых треков.</p>';return}
+ var h=bars(r);
+ if(S.tracks.length>=2){
+  var scores = S.tracks.map(function(t){return t.done?sc(t):null});
+  var validScores = scores.filter(function(v){return v!==null});
+  if(validScores.length>=2){
+   var minS=Math.min.apply(null,validScores), maxS=Math.max.apply(null,validScores), spanS=Math.max(1,maxS-minS);
+   var pts=[];
+   var w=320, ht=36;
+   scores.forEach(function(s,i){
+    var x = (i/(scores.length-1))*w;
+    var y = s===null ? ht/2 : ht - ((s-minS)/spanS)*(ht-8) - 4;
+    pts.push({x:x,y:y,s:s});
+   });
+   var pathD="";
+   pts.forEach(function(p,i){pathD+=(i===0?"M ":"L ")+p.x.toFixed(1)+" "+p.y.toFixed(1)});
+   h+='<div style="margin-top:14px"><div style="font-size:13px;color:var(--mut);font-weight:600;margin-bottom:6px">Динамика треков</div><svg class="sparkline" viewBox="0 0 '+w+' '+ht+'" preserveAspectRatio="none"><path d="'+pathD+'" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--tx);opacity:.85"/></svg></div>';
+  }
+ }
+ if(r.length>1){
+  var m=pick(r,sc),bn=sc(m[0]),wn=sc(m[1]);
+  h+='<div class="ex dotline"><span class="left"><span class="dot" style="color:hsl('+hue(bn)+' 75% 58%)"></span>Лучший</span><span class="val">'+esc(m[0].t)+' · '+bn+'</span></div>';
+  h+='<div class="ex dotline"><span class="left"><span class="dot" style="color:hsl('+hue(wn)+' 75% 58%)"></span>Слабейший</span><span class="val">'+esc(m[1].t)+' · '+wn+'</span></div>';
+ }
+ box.innerHTML=h}
+$("tgl").onclick=function(){var b=$("stats"),o=b.hidden;b.hidden=!o;this.setAttribute("aria-expanded",o);$("chev").textContent=o?"Скрыть":"Подробнее";if(o)fillStats()};
+function badge(i){var t=S.tracks[i],n=t.done?sc(t):null;paintBadge(refs[i],n);var row=refs[i]&&refs[i].closest(".trk");if(row){row.classList.toggle("rated",n!==null);if(n!==null)row.style.setProperty("--ac",hue(n));else row.style.removeProperty("--ac")}}
+function renderAlbum(){
+ show("view");
+ ACC=albumHue(S);$("hdr").style.setProperty("--ah",ACC);
+ $("stats").hidden=true;$("tgl").setAttribute("aria-expanded","false");$("chev").textContent="Подробнее";
+ $("aname").textContent=S.title||S.album||"Без названия";
+ $("aart").textContent=S.artist||"";$("aart").hidden=!S.artist;
+ $("ayr").textContent=S.year||"";$("ayr").hidden=!S.year;
+ document.documentElement.style.setProperty("--ahp",ACC);
+ var box=$("rows");box.innerHTML="";refs=[];
+ S.tracks.forEach(function(t,i){
+  var w=document.createElement("div");w.className="trk"+(t.done?" rated":"");
+  if(t.done)w.style.setProperty("--ac",hue(sc(t)));
+  var h=document.createElement("button");h.className="hd";h.setAttribute("aria-expanded",open===i);
+  var ni=document.createElement("span");ni.className="i";ni.textContent=i+1;
+  var nt=document.createElement("span");nt.className="t";nt.textContent=t.t;
+  var bd=document.createElement("span");bd.className="bd";
+  h.append(ni,nt,bd);w.appendChild(h);refs.push(bd);
+  var pn=document.createElement("div");pn.className="pn";pn.hidden=open!==i;if(animOpen===i)pn.classList.add("in");
+  C.forEach(function(name,k){
+   var s=document.createElement("div");s.className="sl";s.style.setProperty("--c",col(k));
+   s.innerHTML='<div class="h"><span></span><b></b></div><div class="rw"><input type="range" min="1" max="10" step="1"><span class="bub"></span></div><div class="ticks">'+Array(10).fill("<i></i>").join("")+'</div><div class="ends"><span>слабо</span><span>сильно</span></div>';
+   s.querySelector("span").textContent=name;
+   var b=s.querySelector("b"),rg=s.querySelector("input"),rw=s.querySelector(".rw"),bub=s.querySelector(".bub"),ticks=s.querySelectorAll(".ticks i");rg.value=t.v[k];rg.setAttribute("aria-label",name);
+   var x=X(t),off=function(){return x[k]};
+   function paint(){var isOff=off(),val=t.v[k],lab=vLabel(val);b.textContent=isOff?"–":fv(val);rg.setAttribute("aria-valuetext",isOff?"отключено":fv(val)+" — "+lab);rg.style.setProperty("--p",((val-1)/9*100)+"%");rw.style.setProperty("--f",(val-1)/9);bub.innerHTML=fv(val)+(lab?"<small>"+lab+"</small>":"");rg.disabled=isOff;s.classList.toggle("off",isOff);for(var ti=0;ti<ticks.length;ti++)ticks[ti].classList.toggle("on",!isOff&&ti<val)}
+   var hideT=null;
+   function showB(){if(!off()){bub.classList.add("on");clearTimeout(hideT)}}
+   function hideB(){clearTimeout(hideT);hideT=setTimeout(function(){bub.classList.remove("on")},500)}
+   rg.oninput=function(){var nv=+rg.value;if(nv!==t.v[k]){try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}}t.v[k]=nv;t.done=true;showB();hideB();paint();badge(i);stats();save()};
+   rg.addEventListener("pointerdown",showB);["pointerup","pointercancel","blur"].forEach(function(ev){rg.addEventListener(ev,hideB)});
+   var tg=document.createElement("button");tg.className="tg";
+   var pt=function(){tg.textContent=x[k]?"Учитывать":"Отключить";tg.setAttribute("aria-pressed",!!x[k]);paint()};
+   tg.onclick=function(){if(!x[k]&&x.filter(Boolean).length>=C.length-1)return;x[k]=!x[k];pt();badge(i);stats();save()};
+   s.querySelector(".h").insertBefore(tg,b);pt();
+   pn.appendChild(s)});
+  var bar=document.createElement("div");bar.className="bar";
+  var rs=document.createElement("button");rs.className="btn";rs.textContent="Сбросить";
+  var ok=document.createElement("button");ok.className="btn p";ok.textContent="Готово";
+  rs.onclick=function(){t.v=[5,5,5,5,5,5];t.done=false;t.x=[false,false,false,false,false,false];open=-1;save();renderAlbum()};
+  ok.onclick=function(){ok.classList.remove("pulse");void ok.offsetWidth;ok.classList.add("pulse");open=-1;save();renderAlbum()};
+  bar.append(rs,ok);pn.appendChild(bar);
+  if(i<S.tracks.length-1){
+   ok.className="btn";
+   var nb=document.createElement("div");nb.className="bar";
+   var nx=document.createElement("button");nx.className="btn p";nx.textContent="Следующий трек →";
+   nx.onclick=function(){nx.classList.remove("pulse");void nx.offsetWidth;nx.classList.add("pulse");open=i+1;animOpen=open;save();renderAlbum();animOpen=-1;var nw=$("rows").children[i+1];if(nw)nw.scrollIntoView({block:"nearest",behavior:"smooth"})};
+   nb.appendChild(nx);pn.appendChild(nb)}
+  w.appendChild(pn);
+  h.onclick=function(){open=open===i?-1:i;animOpen=open;renderAlbum();animOpen=-1;if(open===i)w.scrollIntoView({block:"nearest",behavior:"smooth"})};
+  box.appendChild(w);badge(i)});
+ stats()}
+$("back").onclick=home;
+$("edit").onclick=function(){editing=true;$("artist").value=S.artist||"";$("title").value=S.title||S.album||"";$("year").value=S.year||"";$("list").value=S.tracks.map(function(t){return t.t}).join("\n");show("setup")};
+$("resetAlb").onclick=function(){if(confirm("Сбросить оценки всех треков этого альбома?")){S.tracks.forEach(function(t){t.v=[5,5,5,5,5,5];t.done=false;t.x=[false,false,false,false,false,false]});open=-1;save();renderAlbum()}};
+$("del").onclick=function(){if(confirm("Удалить альбом и все его оценки?")){L=L.filter(function(a){return a!==S});save();home()}};
+
+/* ——— сохранение / загрузка файлов ——— */
+function slug(s){return ((s||"album").replace(/[^A-Za-zА-Яа-яЁё0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)||"album")}
+function download(name,blob){
+ var a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);a.download=name;
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(function(){URL.revokeObjectURL(a.href)},1500)}
+$("saveFile").onclick=function(){
+ download("библиотека-оценок.json",new Blob([JSON.stringify({app:"track-rater",v:5,albums:L},null,2)],{type:"application/json"}));
+ var b=this;b.textContent="Сохранено";setTimeout(function(){b.textContent="Сохранить"},1500)};
+function cleanTrack(t){
+ if(!t||typeof t.t!=="string")return null;
+ var vOk = Array.isArray(t.v) && t.v.length===6 && t.v.every(function(n){return typeof n==="number" && n>=1 && n<=10});
+ var v = vOk ? t.v.map(function(n){var r=Math.round(n);return r>=1&&r<=10?r:5}) : [5,5,5,5,5,5];
+ var done = !!t.done && vOk;
+ var x = Array.isArray(t.x)&&t.x.length===6 ? t.x.map(Boolean) : [false,false,false,false,false,false];
+ if(x.every(Boolean))x=[false,false,false,false,false,false];
+ return {t:t.t.slice(0,200),v:v,done:done,x:x}}
+function cleanAlbum(o){
+ if(!o||!Array.isArray(o.tracks))return null;
+ var tr=o.tracks.slice(0,300).map(cleanTrack).filter(Boolean);
+ if(!tr.length)return null;
+ var a={id:o.id||uid(),tracks:tr};
+ a.artist=typeof o.artist==="string"?o.artist.slice(0,120):"";
+ a.title=typeof o.title==="string"?o.title.slice(0,200):"";
+ a.year=parseYear(o.year);
+ a.album=displayName(a);
+ return a}
+function importFile(file){
+ if(!file)return;
+ var r=new FileReader();
+ r.onerror=function(){msg("Не удалось открыть файл.")};
+ r.onload=function(){
+  var p;try{p=JSON.parse(r.result)}catch(e){msg("Не удалось прочитать файл.");return}
+  var list=p&&Array.isArray(p.albums)?p.albums:(p&&Array.isArray(p.tracks)?[p]:null);
+  if(!list){msg("Неверный формат файла.");return}
+  var n=0;
+  list.forEach(function(o){
+   var a=cleanAlbum(o);if(!a)return;
+   var i=L.findIndex(function(x){return x.id===a.id});
+   if(i<0&&(a.artist||a.title))i=L.findIndex(function(x){
+     return same(x.artist,a.artist)&&same(x.title,a.title)&&(x.year||null)===(a.year||null)
+   });
+   if(i<0)i=L.findIndex(function(x){return same(displayName(x),displayName(a))||same(x.album,a.album)});
+   if(i>=0){a.id=L[i].id;L[i]=a}else L.unshift(a);
+   n++});
+  if(!n){msg("В файле не нашлось альбомов.");return}
+  save();home();msg("Загружено альбомов: "+n)};
+ r.readAsText(file)}
+$("loadLib").onclick=function(){$("fileIn").click()};
+$("fileIn").onchange=function(){importFile(this.files[0]);this.value=""};
+
+/* ——— карточка альбома ——— */
+var cardBlob=null;
+function rr(c,x,y,w,h,r){if(c.roundRect){c.beginPath();c.roundRect(x,y,w,h,r);c.fill()}else c.fillRect(x,y,w,h)}
+function wrapT(c,text,maxW,maxL){var ws=text.split(" "),ls=[],cu="";
+ ws.forEach(function(w){var t=cu?cu+" "+w:w;if(cu&&c.measureText(t).width>maxW){ls.push(cu);cu=w}else cu=t});
+ if(cu)ls.push(cu);return ls.slice(0,maxL)}
+function fitT(c,s,maxW){while(s.length>1&&c.measureText(s).width>maxW){s=s.slice(0,-2)+"…"}return s}
+
+function rp(c,x,y,w,h,r){
+ r=Math.min(r*1.45,w/2,h/2);var N=22,e=2/5,first=true;
+ c.beginPath();
+ function corner(cx,cy,a0){for(var i=0;i<=N;i++){var t=a0+i/N*Math.PI/2,co=Math.cos(t),si=Math.sin(t);
+  var px=cx+r*Math.sign(co)*Math.pow(Math.abs(co),e),py=cy+r*Math.sign(si)*Math.pow(Math.abs(si),e);
+  if(first){c.moveTo(px,py);first=false}else c.lineTo(px,py)}}
+ corner(x+r,y+r,Math.PI);corner(x+w-r,y+r,1.5*Math.PI);corner(x+w-r,y+h-r,0);corner(x+r,y+h-r,.5*Math.PI);
+ c.closePath()}
+function glass(c,x,y,w,h,r,tint){
+ c.save();c.shadowColor="rgba(0,0,0,.55)";c.shadowBlur=44;c.shadowOffsetY=16;
+ rp(c,x,y,w,h,r);c.fillStyle="#09090c";c.fill();c.restore();
+ rp(c,x,y,w,h,r);c.fillStyle="rgba(255,255,255,.08)";c.fill();
+ c.save();rp(c,x,y,w,h,r);c.clip();
+ var g=c.createLinearGradient(x,y,x+w*.6,y+h*.6);g.addColorStop(0,"rgba(255,255,255,.15)");g.addColorStop(.48,"rgba(255,255,255,0)");
+ c.fillStyle=g;c.fillRect(x,y,w,h);
+ if(tint!=null){var tg=c.createRadialGradient(x,y,0,x,y,Math.max(w,h)*.85);tg.addColorStop(0,"hsla("+tint+",75%,60%,.28)");tg.addColorStop(1,"hsla("+tint+",75%,60%,0)");c.fillStyle=tg;c.fillRect(x,y,w,h)}
+ var t=c.createLinearGradient(0,y,0,y+6);t.addColorStop(0,"rgba(255,255,255,.34)");t.addColorStop(1,"rgba(255,255,255,0)");
+ c.fillStyle=t;c.fillRect(x,y,w,6);c.restore();
+ rp(c,x+1,y+1,w-2,h-2,r-1);c.strokeStyle="rgba(255,255,255,.22)";c.lineWidth=2;c.stroke()}
+function drawRing(c,cx,cy,R,lw,val,fu){
+ c.save();c.lineWidth=lw;c.lineCap="round";
+ c.strokeStyle="rgba(255,255,255,.12)";c.beginPath();c.arc(cx,cy,R,0,Math.PI*2);c.stroke();
+ if(val!==null){
+  c.shadowColor="hsla("+hue(val)+",80%,60%,.6)";c.shadowBlur=26;c.strokeStyle="hsl("+hue(val)+" 78% 62%)";
+  c.beginPath();c.arc(cx,cy,R,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.max(.01,val/100));c.stroke()}
+ c.restore();
+ var t=val===null?"–":String(val);
+ var k=R/111;
+ c.fillStyle="#f6f3fb";c.textAlign="center";c.font="800 "+Math.round((t.length>2?64:82)*k)+"px "+fu;
+ c.fillText(t,cx,cy+Math.round((t.length>2?23:29)*k));c.textAlign="left"}
+function drawCard(){
+ var Wd=1080,MinH=1920,M=56,Q=56,G=32,w=Wd-2*M,RS=250;
+ var ff="'Manrope', Arial, sans-serif",fu="'Unbounded', Arial, sans-serif";
+ var cv=document.createElement("canvas"),c=cv.getContext("2d");
+ cv.width=Wd;cv.height=MinH;
+ var art=(S.artist||"").trim(),tit=(S.title||S.album||"Без названия").trim(),yr=S.year||null;
+ var hasArt=!!art,hasYr=!!yr,n=S.tracks.length,ah=albumHue(S),tot=albScore(S);
+ var tw=w-2*Q-RS-32;
+ c.font="800 58px "+ff;
+ var tl=wrapT(c,tit,tw,4);
+ var tb=(hasArt?46:0)+tl.length*72+(hasYr?46:0);
+ var hh=Math.max(tb,RS)+2*Q;
+ var r=done(S);
+ var critRows=[];
+ C.forEach(function(name,k){var s=0,cnt=0;r.forEach(function(t){if(!X(t)[k]){s+=t.v[k];cnt++}});if(cnt)critRows.push({name:name,a:s/cnt,k:k})});
+ var critGridRows = critRows.length ? Math.ceil(critRows.length / 3) : 0;
+ var critH = critGridRows ? (critGridRows * 74 + 24) : 0;
+ var RH=76,th=56+n*RH+critH;
+ 
+ var contentH=hh+G+th;
+ if(contentH+2*M>MinH && n>0){
+  var availTh=MinH-2*M-hh-G-critH-48;
+  RH=Math.max(52,Math.floor(availTh/n));
+  th=critH+48+n*RH;
+  contentH=hh+G+th;
+ }
+ var H=Math.max(MinH,contentH+2*M);
+ var y0=M;
+ cv.height=H;
+
+ c.fillStyle="#09090c";c.fillRect(0,0,Wd,H);
+ var rg=c.createRadialGradient(Wd/2,0,0,Wd/2,0,Wd*.95);rg.addColorStop(0,"#262634");rg.addColorStop(1,"rgba(9,9,12,0)");
+ c.fillStyle=rg;c.fillRect(0,0,Wd,H);
+ var g1=c.createRadialGradient(0,0,0,0,0,Wd*1.05);g1.addColorStop(0,"hsla("+ah+",70%,50%,.30)");g1.addColorStop(1,"hsla("+ah+",70%,50%,0)");
+ c.fillStyle=g1;c.fillRect(0,0,Wd,H);
+ var ah2=(ah+45)%360,g2=c.createRadialGradient(Wd,H,0,Wd,H,Wd*1.1);g2.addColorStop(0,"hsla("+ah2+",70%,50%,.2)");g2.addColorStop(1,"hsla("+ah2+",70%,50%,0)");
+ c.fillStyle=g2;c.fillRect(0,0,Wd,H);
+
+ glass(c,M,y0,w,hh,56,ah);
+ var x0=M+Q,y=y0+Q+Math.round((hh-2*Q-tb)/2);c.textAlign="left";
+ if(hasArt){c.fillStyle="#b4adc6";c.font="600 32px "+ff;c.fillText(fitT(c,art,tw),x0,y+30);y+=46}
+ c.fillStyle="#f6f3fb";c.font="800 58px "+ff;
+ tl.forEach(function(l,i){c.fillText(l,x0,y+52+i*72)});
+ y+=tl.length*72;
+ if(hasYr){c.fillStyle="#b4adc6";c.font="600 30px "+ff;c.fillText(String(yr),x0,y+30)}
+ drawRing(c,M+w-Q-RS/2,y0+hh/2,RS/2-14,22,tot,fu);
+
+ var ty0=y0+hh+G;
+ glass(c,M,ty0,w,th,48);
+ var curY = ty0 + 36;
+ if(critRows.length){
+  var cols = 3, gap = 24;
+  var colW = (w - 2*Q - (cols - 1)*gap) / cols;
+  critRows.forEach(function(cr,ci){
+   var colIdx = ci % cols;
+   var rowIdx = Math.floor(ci / cols);
+   var cx = x0 + colIdx*(colW+gap);
+   var cyItem = curY + rowIdx*74;
+   c.fillStyle="#b4adc6";
+   var shortName = cr.name.toUpperCase();
+   var fs = 21;
+   c.font = "600 " + fs + "px " + ff;
+   while(c.measureText(shortName).width > colW && fs > 13){ fs--; c.font = "600 " + fs + "px " + ff; }
+   c.fillText(shortName,cx,cyItem+18);
+   c.font="800 28px "+fu;c.fillStyle="#f6f3fb";
+   c.fillText(String(Math.round(cr.a)),cx,cyItem+50);
+  });
+  curY += critGridRows * 74 + 18;
+  c.fillStyle="rgba(255,255,255,.1)";c.fillRect(x0,curY-16,w-2*Q,2);
+ }
+
+ var rowFont=RH<68?27:30;
+ var badgeH=RH<68?42:50;
+
+ S.tracks.forEach(function(t,i){
+  var ry=curY+i*RH,cy=ry+RH/2;
+  c.textAlign="left";c.font="600 "+(rowFont-2)+"px "+ff;c.fillStyle="#b4adc6";c.fillText(String(i+1),x0,cy+9);
+  c.fillStyle="#f6f3fb";c.font="600 "+rowFont+"px "+ff;c.fillText(fitT(c,t.t,w-2*Q-64-130),x0+64,cy+10);
+  var bw=104,bh=badgeH,bx=M+w-Q-bw,by=cy-bh/2;
+  rp(c,bx,by,bw,bh,16);
+  var hb=t.done?hue(sc(t)):0;c.fillStyle=t.done?"hsla("+hb+",75%,50%,.38)":"rgba(255,255,255,.12)";c.fill();
+  c.save();rp(c,bx,by,bw,bh,16);c.clip();
+  var gl=c.createLinearGradient(0,by,0,by+bh*.55);gl.addColorStop(0,"rgba(255,255,255,.28)");gl.addColorStop(1,"rgba(255,255,255,0)");
+  c.fillStyle=gl;c.fillRect(bx,by,bw,bh);c.restore();
+  rp(c,bx+1,by+1,bw-2,bh-2,15);c.strokeStyle=t.done?"hsla("+hb+",85%,66%,.65)":"rgba(255,255,255,.3)";c.lineWidth=2;c.stroke();
+  c.textAlign="center";c.font="800 "+(rowFont-4)+"px "+fu;c.fillStyle=t.done?"hsl("+hb+" 95% 88%)":"#b4adc6";
+  c.fillText(t.done?String(sc(t)):"–",bx+bw/2,cy+9);
+  if(i<n-1){c.fillStyle="rgba(255,255,255,.08)";c.fillRect(x0,ry+RH-1,w-2*Q,2)}});
+ return cv}
+function fname(){return slug(displayName(S))+".png"}
+
+function openCard(){
+ if(!S)return;
+ var go=function(){
+  try{
+   var cv=drawCard();
+   var dataUrl=cv.toDataURL("image/png");
+   $("img").style.display="";
+   $("img").src=dataUrl;
+   $("hint").textContent="Если сохранение не сработает, нажми и удерживай картинку.";
+   $("ov").hidden=false;$("ov").scrollTop=0;
+   document.body.style.overflow="hidden";
+   cv.toBlob(function(b){
+    if(!b){cardBlob=null;return}
+    cardBlob=b;
+    try{$("sh").hidden=!(navigator.canShare&&navigator.canShare({files:[new File([b],fname(),{type:"image/png"})]}))}catch(e){$("sh").hidden=true}
+   },"image/png");
+  }catch(e){
+   cardBlob=null;
+   $("img").removeAttribute("src");
+   $("img").style.display="none";
+   $("hint").textContent="Не удалось создать карточку.";
+   $("ov").hidden=false;
+   document.body.style.overflow="hidden";
+  }
+ };
+
+ if(document.fonts&&document.fonts.ready){
+  document.fonts.ready.then(function(){
+   setTimeout(go, 60);
+  });
+ } else {
+  go();
+ }
+}
+
+function closeOv(){$("ov").hidden=true;document.body.style.overflow="";$("img").removeAttribute("src")}
+$("card").onclick=openCard;
+$("cl").onclick=closeOv;
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("ov").hidden)closeOv()});
+$("sv").onclick=async function(){var h=$("hint");
+ try{
+  if(!cardBlob){h.textContent="Карточка ещё не готова.";return}
+  if(typeof claude!=="undefined"){var d=await claude.use("downloads");if(d){await d.save({filename:fname(),data:cardBlob});return}}
+  download(fname(),cardBlob)
+ }catch(e){if(!e||e.code!=="declined")h.textContent="Не удалось сохранить: нажми и удерживай картинку."}};
+$("sh").onclick=async function(){try{if(cardBlob)await navigator.share({files:[new File([cardBlob],fname(),{type:"image/png"})]})}catch(e){}};
+
+home();
+</script>
+</body>
+</html>
