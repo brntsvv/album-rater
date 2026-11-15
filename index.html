@@ -469,6 +469,29 @@ select.seg.ysel option{background:#1d1b26;color:#f6f3fb}
 }
 @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 #quickRateOv .rw { width: 100%; position: relative; padding: 0 2px; }
+
+/* Модалка для копирования бэкапа */
+#exportOv {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(8,6,16,.8);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#exportOv .modal-card {
+  width: 100%;
+  max-width: 400px;
+  background: linear-gradient(135deg,var(--sheen),transparent 48%),var(--card);
+  border: 1px solid var(--edge);
+  border-radius: 26px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.5);
+}
 </style>
 </head>
 <body>
@@ -664,6 +687,19 @@ select.seg.ysel option{background:#1d1b26;color:#f6f3fb}
     <div class="bar" style="margin-top: 0;">
       <button class="btn" id="qrCancel">Отмена</button>
       <button class="btn p" id="qrSave">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка для копирования бэкапа (если загрузка заблокирована) -->
+<div id="exportOv" hidden role="dialog" aria-modal="true" aria-label="Сохранение библиотеки">
+  <div class="modal-card">
+    <div class="ttl" style="margin-bottom:10px;">Сохранение</div>
+    <p class="lbl" style="margin:0 0 10px;line-height:1.4;color:var(--tx);font-weight:500;">Telegram блокирует прямую загрузку. Скопируйте код ниже и сохраните его в файл <b>.json</b>.</p>
+    <textarea id="exportData" style="width:100%;height:150px;background:rgba(0,0,0,0.3);border:1px solid var(--edge);color:var(--mut);padding:10px;border-radius:12px;font-family:monospace;font-size:12px;margin-bottom:14px;resize:none;" readonly></textarea>
+    <div class="bar" style="margin-top:0;">
+      <button class="btn p" id="copyExportBtn">Скопировать</button>
+      <button class="btn" id="closeExportBtn">Закрыть</button>
     </div>
   </div>
 </div>
@@ -1443,44 +1479,84 @@ $("qrReset").onclick = function() {
 
 function slug(s){return ((s||"album").replace(/[^A-Za-zА-Яа-яЁё0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)||"album")}
 
-function download(name,blob){
- var a=document.createElement("a");
- a.href=URL.createObjectURL(blob);
- a.download=name;
- a.target="_blank"; // Важно, чтобы Telegram не перехватывал ссылку и не открывал код
- document.body.appendChild(a);
- a.click();
- a.remove();
- setTimeout(function(){URL.revokeObjectURL(a.href)},1500)
+async function download(name,blob){
+  var file = new File([blob], name, {type: blob.type});
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: 'Ratepiece' });
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return; // Пользователь отменил
+    }
+  }
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=name;
+  a.target="_blank";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},1500);
 }
 
 async function doSaveLib(){
   var dataStr = JSON.stringify({app:"track-rater",v:13,albums:L},null,2);
-  var blob = new Blob([dataStr], {type: "application/octet-stream"}); // octet-stream заставляет скачивать, а не открывать
+  var blob = new Blob([dataStr], {type: "application/json"});
   var file = new File([blob], "ratepiece-backup.json", {type: "application/json"});
-  
   var b=$("saveFileHome");
-  
-  // Пытаемся использовать нативный шаринг (идеально для iOS/Android)
+
+  // 1. Пытаемся поделиться
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
-      await navigator.share({
-        files: [file],
-        title: 'Бэкап Ratepiece'
-      });
+      await navigator.share({ files: [file], title: 'Бэкап Ratepiece' });
       if(b){b.textContent="Готово";setTimeout(function(){b.textContent="Сохранить"},1500)}
       return;
     } catch (e) {
-      // Если пользователь отменил, идем дальше к скачиванию
+      if (e.name === 'AbortError') return;
     }
   }
-  
-  // Запасной вариант (для ПК или если шаринг не сработал)
-  download("ratepiece-backup.json", blob);
-  if(b){b.textContent="Сохранено";setTimeout(function(){b.textContent="Сохранить"},1500)}
+
+  // 2. Пытаемся скачать
+  try {
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="ratepiece-backup.json";
+    a.target="_blank";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},1500);
+    if(b){b.textContent="Сохранено";setTimeout(function(){b.textContent="Сохранить"},1500)}
+  } catch(e){}
+
+  // 3. Если мы в Телеграме, показываем окно для копирования (самый надежный способ)
+  if (window.Telegram && window.Telegram.WebApp) {
+    $("exportData").value = dataStr;
+    $("exportOv").hidden = false;
+    document.body.style.overflow = "hidden";
+  }
 }
 
 $("saveFileHome").onclick=doSaveLib;
+
+$("closeExportBtn").onclick = function() {
+  $("exportOv").hidden = true;
+  document.body.style.overflow = "";
+};
+
+$("copyExportBtn").onclick = async function() {
+  try {
+    await navigator.clipboard.writeText($("exportData").value);
+    $("copyExportBtn").textContent = "Скопировано!";
+    setTimeout(() => { $("copyExportBtn").textContent = "Скопировать"; }, 2000);
+  } catch (err) {
+    $("exportData").select();
+    document.execCommand("copy");
+    $("copyExportBtn").textContent = "Скопировано!";
+    setTimeout(() => { $("copyExportBtn").textContent = "Скопировать"; }, 2000);
+  }
+};
+
 function cleanTrack(t){
  if(!t||typeof t.t!=="string")return null;
  var vOk = Array.isArray(t.v) && t.v.length===6 && t.v.every(function(n){return typeof n==="number" && n>=1 && n<=9});
@@ -1738,7 +1814,7 @@ $("sv").onclick=async function(){var h=$("hint");
  try{
   if(!cardBlob){h.textContent="Карточка ещё не готова.";return}
   if(typeof claude!=="undefined"){var d=await claude.use("downloads");if(d){await d.save({filename:fname(),data:cardBlob});return}}
-  download(fname(),cardBlob)
+  await download(fname(), cardBlob);
  }catch(e){if(!e||e.code!=="declined")h.textContent="Не удалось сохранить: нажми и удерживай картинку."}};
 $("sh").onclick=async function(){try{if(cardBlob)await navigator.share({files:[new File([cardBlob],fname(),{type:"image/png"})]})}catch(e){}};
 
@@ -1958,7 +2034,7 @@ $("svTop").onclick = async function() {
       var d = await claude.use("downloads");
       if (d) { await d.save({filename:fnameTop(), data:cardBlobTop}); return; }
     }
-    download(fnameTop(), cardBlobTop);
+    await download(fnameTop(), cardBlobTop);
   } catch(e) {
     if (!e || e.code !== "declined") h.textContent = "Не удалось сохранить: нажми и удерживай картинку.";
   }
