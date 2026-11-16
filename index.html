@@ -8,6 +8,7 @@
 <title>Ratepiece</title>
 <!-- Фавиконка в виде логотипа -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23ff4b8c'/%3E%3Cstop offset='50%25' stop-color='%23e054ff'/%3E%3Cstop offset='100%25' stop-color='%23a555ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='60' cy='60' r='45' fill='none' stroke='url(%23g)' stroke-width='12' stroke-dasharray='41.12 6'/%3E%3Ctext x='60' y='78' font-family='sans-serif' font-size='52' font-weight='800' fill='%23fff' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#09090c;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.14);--edge:rgba(255,255,255,.24);--spec:rgba(255,255,255,.34);--sheen:rgba(255,255,255,.13);--shadow:rgba(0,0,0,.35);--tx:#f6f3fb;--mut:#bdb6cf;--track:rgba(255,255,255,.14);--tabon:rgba(255,255,255,.22);--pbg:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.8));--ptx:#16122a;--o:.6;color-scheme:dark;--safe-top:env(safe-area-inset-top, 0px);--safe-bottom:env(safe-area-inset-bottom, 0px)}
@@ -954,7 +955,27 @@ input[type=range]:active::-moz-range-thumb {
 
 <script>
 /* ——— Telegram WebApp init ——— */
-if (window.Telegram && window.Telegram.WebApp) {
+function initTgApp() {
+  if (window.Telegram && window.Telegram.WebApp) {
+    var tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    try { tg.setHeaderColor('#09090c'); tg.setBackgroundColor('#09090c'); } catch(e){}
+    function applyTgInsets() {
+      var top = 0, bottom = 0;
+      if (tg.contentSafeAreaInset) { top = tg.contentSafeAreaInset.top || 0; bottom = tg.contentSafeAreaInset.bottom || 0; }
+      else if (tg.safeAreaInset) { top = tg.safeAreaInset.top || 0; bottom = tg.safeAreaInset.bottom || 0; }
+      if (top > 0) document.documentElement.style.setProperty('--safe-top', top + 'px');
+      if (bottom > 0) document.documentElement.style.setProperty('--safe-bottom', bottom + 'px');
+    }
+    applyTgInsets();
+    tg.onEvent('viewportChanged', applyTgInsets);
+    setTimeout(applyTgInsets, 100);
+    setTimeout(applyTgInsets, 500);
+  }
+}
+initTgApp();
+if (false) {
   var tg = window.Telegram.WebApp;
   tg.ready();
   tg.expand();
@@ -973,23 +994,81 @@ if (window.Telegram && window.Telegram.WebApp) {
 }
 
 
-/* ——— ТАКТИЛЬНЫЙ ОТКЛИК (HAPTIC FEEDBACK: TELEGRAM NATIVE + WEB FALLBACK) ——— */
+/* ——— ТАКТИЛЬНЫЙ ОТКЛИК (TELEGRAM SDK + DIRECT BRIDGE + SAFARI TAPTIC + VIBRATE) ——— */
+var _iosSwitch = null;
+function _safariTaptic() {
+  try {
+    if (!_iosSwitch) {
+      var lbl = document.createElement("label");
+      lbl.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden";
+      var inp = document.createElement("input");
+      inp.type = "checkbox";
+      inp.setAttribute("switch", "");
+      lbl.appendChild(inp);
+      document.body.appendChild(lbl);
+      _iosSwitch = lbl;
+    }
+    _iosSwitch.click();
+  } catch (e) {}
+}
+
+function _tgDirectHaptic(type) {
+  var payload;
+  if (type === "select") payload = { type: "selection_change" };
+  else if (type === "success" || type === "warning" || type === "error") payload = { type: "notification", notification_type: type };
+  else payload = { type: "impact", impact_style: type || "light" };
+  var data = JSON.stringify(payload);
+  var sent = false;
+  try {
+    if (window.TelegramWebviewProxy && window.TelegramWebviewProxy.postEvent) {
+      window.TelegramWebviewProxy.postEvent("web_app_trigger_haptic_feedback", data);
+      sent = true;
+    }
+  } catch (e) {}
+  try {
+    if (window.external && window.external.notify) {
+      window.external.notify(JSON.stringify({ eventType: "web_app_trigger_haptic_feedback", eventData: payload }));
+      sent = true;
+    }
+  } catch (e) {}
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage(JSON.stringify({ eventType: "web_app_trigger_haptic_feedback", eventData: payload }), "*");
+      sent = true;
+    }
+  } catch (e) {}
+  return sent;
+}
+
 function haptic(type) {
+  var triggered = false;
+  // 1. Официальный Telegram WebApp SDK
   try {
     var hf = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback;
     if (hf) {
-      if (type === "select") { hf.selectionChanged(); return; }
-      if (type === "success" || type === "warning" || type === "error") { hf.notificationOccurred(type); return; }
-      hf.impactOccurred(type || "light"); // light | medium | heavy | rigid | soft
-      return;
+      if (type === "select" && hf.selectionChanged) { hf.selectionChanged(); triggered = true; }
+      else if ((type === "success" || type === "warning" || type === "error") && hf.notificationOccurred) { hf.notificationOccurred(type); triggered = true; }
+      else if (hf.impactOccurred) { hf.impactOccurred(type || "light"); triggered = true; }
     }
   } catch (e) {}
+
+  // 2. Прямой мост Telegram WebView (если SDK ещё не прогрузился или открыто в iframe)
+  if (!triggered) {
+    triggered = _tgDirectHaptic(type);
+  }
+
+  // 3. Android / Chrome Vibration API
   try {
     if (navigator.vibrate) {
-      var map = { select: 5, soft: 6, light: 10, medium: 16, rigid: 12, heavy: 24, success: [12, 40, 18], warning: [18, 40, 18], error: [25, 45, 25, 45, 30] };
-      navigator.vibrate(map[type] || 10);
+      var map = { select: 8, soft: 10, light: 14, medium: 22, rigid: 16, heavy: 32, success: [15, 45, 22], warning: [22, 45, 22], error: [30, 50, 30, 50, 35] };
+      if (navigator.vibrate(map[type] || 14)) triggered = true;
     }
   } catch (e) {}
+
+  // 4. iOS Safari 17.4+ нативный Taptic Engine через <input type="checkbox" switch>
+  if (!triggered && /iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    _safariTaptic();
+  }
 }
 
 var C=["Текст","Структура","Реализация","Продакшн","Индивидуальность","Атмосфера"];
