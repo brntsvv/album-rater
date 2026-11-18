@@ -95,7 +95,7 @@ select.btn{background:var(--card);color:var(--tx);border:1px solid var(--line);p
 input[type=file]{display:none}
 html{background:var(--bg)}
 body{background:transparent}
-.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(100% 55% at 50% 0%,#1d1d27,transparent 70%),#09090c}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(90% 45% at 50% 0%,rgba(255,255,255,.07),transparent 70%),#09090c}
 .card,.tabs,.btn,select.btn,#topYear{-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
 .trk{-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%)}
 .card,.trk{background:linear-gradient(135deg,var(--sheen),transparent 48%),var(--card);border:1px solid var(--edge);box-shadow:inset 0 1px 0 var(--spec),inset 0 -1px 0 rgba(0,0,0,.08),0 8px 24px var(--shadow)}
@@ -133,7 +133,7 @@ input[type=range]::-moz-range-thumb{background:radial-gradient(circle at 32% 26%
  .card,.trk,.pc,.btn,select.btn,#topYear,#searchInput,.card textarea,.bd,.tg,#ov img,#ovTop img,.bub,.ps,.pill,.year-segs .seg,.tab{corner-shape:squircle}
 }
 body{font-variant-numeric:tabular-nums}
-#hdr{background:radial-gradient(120% 90% at 0% 0%,hsl(var(--ah,265) 70% 55% / .30),transparent 62%),linear-gradient(135deg,var(--sheen),transparent 48%),var(--card)}
+#hdr{background:linear-gradient(135deg,var(--sheen),transparent 48%),var(--card)}
 .score{align-items:center;gap:12px}
 .ring{position:relative;width:88px;height:88px;flex:none}
 .ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
@@ -154,7 +154,7 @@ body{font-variant-numeric:tabular-nums}
 .bub small{display:block;font:700 8px Manrope,sans-serif;opacity:.72;margin-top:1px;letter-spacing:.01em}
 .sl.off .ticks,.sl.off .ends{opacity:.4}
 .pod{display:flex;align-items:flex-end;gap:6px;margin-bottom:8px}
-.pc{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 5px 8px;border:1px solid var(--edge);border-radius:var(--r-l);color:var(--tx);font-family:inherit;text-align:center;cursor:pointer;background:radial-gradient(120% 90% at 50% 0%,hsl(var(--ah,265) 70% 55% / .30),transparent 72%),var(--card);box-shadow:inset 0 1px 0 var(--spec)}
+.pc{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 5px 8px;border:1px solid var(--edge);border-radius:var(--r-l);color:var(--tx);font-family:inherit;text-align:center;cursor:pointer;background:var(--card);box-shadow:inset 0 1px 0 var(--spec)}
 .pc.p1{min-height:150px}.pc.p2{min-height:128px}.pc.p3{min-height:112px}
 .pm{font:800 16px Unbounded,sans-serif}
 .pt{font-weight:700;font-size:11px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
@@ -165,7 +165,7 @@ body{font-variant-numeric:tabular-nums}
 .at small{display:block;color:var(--mut);font-weight:600;font-size:11px}
 .at .ttl{font-size:17px;line-height:1.18;margin:2px 0;letter-spacing:-.015em}
 .ring::before{content:"";position:absolute;inset:10px;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.13),rgba(255,255,255,.02));box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
-.bg::after{content:"";position:absolute;inset:0;opacity:0;transition:opacity .7s;background:radial-gradient(100% 50% at 15% 0%,hsl(var(--ahp,265) 75% 48% / .30),transparent 70%),radial-gradient(80% 40% at 100% 100%,hsl(calc(var(--ahp,265) + 50) 70% 45% / .16),transparent 70%)}
+.bg::after{display:none}
 html.tint .bg::after{opacity:1}
 .enter{animation:sIn .35s cubic-bezier(.2,.8,.2,1)}
 @keyframes sIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -207,7 +207,7 @@ select.seg.ysel{-webkit-appearance:none;appearance:none;padding-right:28px;backg
 select.seg.ysel option{background:#1d1b26;color:#f6f3fb}
 .year-segs .seg{height:28px;padding:0 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--mut);font:700 11px Manrope,sans-serif;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
 .year-segs .seg.on{background:var(--tabon);color:var(--tx);border-color:var(--edge);box-shadow:inset 0 1px 0 var(--spec)}
-.pc.p1{box-shadow:inset 0 1px 0 var(--spec),0 10px 28px hsla(var(--ah,265),70%,50%,.28),0 0 0 1px hsla(var(--ah,265),70%,60%,.2)}
+.pc.p1{box-shadow:inset 0 1px 0 var(--spec)}
 .pc.p2,.pc.p3{opacity:.96}
 .pc.p2{filter:saturate(.92)}
 .pc.p3{filter:saturate(.85);opacity:.92}
@@ -490,7 +490,7 @@ select.seg.ysel option{background:#1d1b26;color:#f6f3fb}
   box-shadow: 0 8px 32px rgba(0,0,0,.5);
 }
 /* ——— Режим прослушивания ——— */
-#lm{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;background:radial-gradient(100% 45% at 15% 0%,hsl(var(--ahp,265) 75% 45% / .38),transparent 70%),radial-gradient(80% 40% at 100% 100%,hsl(calc(var(--ahp,265) + 50) 70% 45% / .18),transparent 70%),var(--bg);padding:calc(8px + var(--safe-top)) 12px calc(10px + var(--safe-bottom));overflow:hidden}
+#lm{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;background:radial-gradient(90% 45% at 50% 0%,rgba(255,255,255,.07),transparent 70%),var(--bg);padding:calc(8px + var(--safe-top)) 12px calc(10px + var(--safe-bottom));overflow:hidden}
 .lm-top{display:flex;align-items:center;justify-content:space-between;height:38px;flex:none}
 .lm-x{width:34px;height:34px;border-radius:50%;border:1px solid var(--edge);background:var(--card);color:var(--tx);font-size:14px;cursor:pointer;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
 .lm-pos{font:700 12px Manrope,sans-serif;color:var(--mut);letter-spacing:.02em}
@@ -692,6 +692,22 @@ input[type=range]:active::-moz-range-thumb {
   }
 }
 
+/* ссылка на артиста */
+.hd .t small.alink,.at small.alink{display:table;cursor:pointer}
+.alink::after{content:" ›";opacity:.55}
+.alink:active{opacity:.7}
+/* ——— Карточка топа: страницы и серая кнопка ——— */
+.tp-pager{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.tp-pager .btn{flex:none;width:54px;height:44px;font-size:22px;line-height:1}
+.tp-pager .btn:disabled{opacity:.35}
+.tp-cnt{flex:1;text-align:center;font:700 14px Manrope,sans-serif;color:#f6f3fb}
+#topCardBtn.soft{background:var(--card);color:var(--mut);border-color:var(--line);box-shadow:none;opacity:.75}
+/* ——— Иконка карточки топа в шапке ——— */
+.tc-ico{position:absolute;top:10px;right:12px;display:flex}
+#tops .home-ttl + .tc-ico + div{margin-top:20px !important}
+.ico-btn{width:36px;height:36px;border-radius:12px;border:1px solid var(--edge);background:linear-gradient(135deg,var(--sheen),transparent 55%),var(--card);color:var(--tx);display:grid;place-items:center;cursor:pointer;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 var(--spec);transition:transform .15s ease}
+.ico-btn:active{transform:scale(.93)}
+#topCardBtn.soft{color:var(--mut);opacity:.5;box-shadow:none}
 </style>
 </head>
 <body>
@@ -763,8 +779,11 @@ input[type=range]:active::-moz-range-thumb {
   </section>
   
   <section id="tops" hidden>
-    <div class="card">
+    <div class="card" style="position:relative">
       <div class="ttl home-ttl">Топ</div>
+      <div id="topCardBar" class="tc-ico" style="display:none;">
+        <button class="ico-btn" id="topCardBtn" type="button" aria-label="Карточка топа" title="Карточка топа"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="3.5"/><circle cx="9" cy="10" r="1.6"/><path d="M4.5 17.2l4.6-4.4 3.3 3 2.5-2.3 4.6 4.2"/></svg></button>
+      </div>
       <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:8px; margin-bottom:4px;">
         <p class="lbl" style="margin:0;font-size:11px">Год выпуска</p>
         <p class="lbl" style="margin:0; cursor:pointer; text-decoration:underline; opacity:0.7;font-size:11px" id="resetTopFilters">Сбросить фильтры</p>
@@ -802,9 +821,6 @@ input[type=range]:active::-moz-range-thumb {
       <div id="topArtists"></div>
     </div>
 
-    <div class="bar" id="topCardBar" style="display:none; margin-top:8px;">
-      <button class="btn p" id="topCardBtn">Карточка топа</button>
-    </div>
   </section>
   
   <section id="setup" hidden>
@@ -887,11 +903,12 @@ input[type=range]:active::-moz-range-thumb {
 <div id="ov" hidden role="dialog" aria-modal="true" aria-label="Карточка релиза"><div class="in"><img id="img" alt="Карточка релиза"><p class="lbl" id="hint" style="color:#8f87a3">Если сохранение не сработает, нажми и удерживай картинку.</p><div class="bar"><button class="btn p" id="sv">Сохранить</button><button class="btn" id="sh">Поделиться</button></div><div class="bar"><button class="btn" id="cl">Закрыть</button></div></div></div>
 <div id="ovTop" hidden role="dialog" aria-modal="true" aria-label="Карточка топа"><div class="in">
   <div class="top-mode-chips" id="topCardModes">
-    <button class="btn p on" data-mode="all">Всё</button>
+    <button class="btn p on" data-mode="all">Все</button>
     <button class="btn" data-mode="album">Альбомы</button>
     <button class="btn" data-mode="track">Треки</button>
     <button class="btn" data-mode="artist">Артисты</button>
   </div>
+  <div class="tp-pager" id="tpPager" hidden><button class="btn" id="tpPrev" aria-label="Предыдущая страница">‹</button><div class="tp-cnt" id="tpCnt">1 / 1</div><button class="btn" id="tpNext" aria-label="Следующая страница">›</button></div>
   <img id="imgTop" alt="Карточка топа">
   <p class="lbl" id="hintTop" style="color:#8f87a3">Если сохранение не сработает, нажми и удерживай картинку.</p>
   <div class="bar"><button class="btn p" id="svTop">Сохранить</button><button class="btn" id="shTop">Поделиться</button></div>
@@ -1312,7 +1329,7 @@ function home(){
  }
 
  if(!L.length){
-  box.innerHTML = renderEmpty("Пока тихо", "Добавь первый релиз, чтобы начать собирать свой музыкальный вкус.", "document.getElementById('add').click()", "Добавить релиз");
+  box.innerHTML = renderEmpty("Пока тихо", "Библиотека пуста. Добавь первый релиз.", "document.getElementById('add').click()", "Добавить релиз");
   return;
  }
  if(!list.length){
@@ -1348,7 +1365,8 @@ function home(){
 
   var h=document.createElement("button");h.className="hd";
   var t=document.createElement("span");t.className="t";
-  if(a.artist){var art=document.createElement("small");art.textContent=a.artist;t.appendChild(art)}
+  if(a.artist){var art=document.createElement("small");art.textContent=a.artist;art.className="alink";art.setAttribute("role","link");
+   art.onclick=function(e){e.stopPropagation();openArtist(a.artist,"home")};t.appendChild(art)}
   var main=document.createElement("span");main.className="name";
   main.textContent=a.title||a.album||"Без названия";
   
@@ -1548,6 +1566,7 @@ function renderTops(){
   } else {
       topCardBar.style.display = 'none';
   }
+  $("topCardBtn").classList.toggle("soft", !topLimit);
 
   var limitPrefix = topLimit > 0 ? "Топ " + topLimit + " " : "Топ ";
   document.querySelector("#cardAlbums .ttl").textContent = limitPrefix + "альбомов";
@@ -1602,7 +1621,7 @@ function renderTops(){
           filteredArtists.forEach(function(art, i){
               var d = document.createElement("div"); d.className = "rank";
               d.innerHTML = '<span class="n">'+(i+1)+'</span><div class="info"><b>'+esc(art.name)+'</b></div><span class="sc"><span class="sc-num" style="color:hsl('+hue(art.score)+' 78% 64%)">'+art.score+'</span><span class="sc-bar-wrap"><span class="sc-bar" style="width:'+art.score+'%; background:hsl('+hue(art.score)+' 78% 64%)"></span></span></span>';
-              d.onclick = function(){ openArtist(art.name); };
+              d.onclick = function(){ openArtist(art.name, "tops"); };
               arbox.appendChild(d);
           });
       }
@@ -1704,6 +1723,7 @@ $("lock").onclick=function(){
  haptic("success");editing=false;open=-1;save();renderAlbum()};
 
 var viewReturnTo="home"; // куда вернуться с экрана релиза: home | tops | artist
+var artistFrom="tops", artistFromAlbum=null, artistFromRet="home"; // откуда открыта страница артиста: tops | home | album
 var currentArtistName=null;
 
 function openAlbum(a, ret){
@@ -1713,8 +1733,10 @@ function openAlbum(a, ret){
   renderAlbum();
 }
 
-function openArtist(name){
+function openArtist(name, from){
+  if(from) artistFrom = from;
   currentArtistName = name;
+  $("artistBack").textContent = artistFrom==="album" ? "← К релизу" : (artistFrom==="home" ? "← Все релизы" : "← К топу");
   function byYear(x,y){
     var yx=x.year, yy=y.year;
     if(yx==null&&yy==null) return ruCmp(x.title||x.album, y.title||y.album);
@@ -1882,6 +1904,8 @@ function renderAlbum(){
  $("aname").textContent=S.title||S.album||"Без названия";
 
  $("aart").textContent=S.artist||"";$("aart").hidden=!S.artist;
+ $("aart").classList.toggle("alink",!!S.artist);$("aart").setAttribute("role",S.artist?"link":"");
+ $("aart").onclick=S.artist?function(){artistFromAlbum=S;artistFromRet=viewReturnTo;openArtist(S.artist,"album")}:null;
  $("ayr").textContent=S.year||"";$("ayr").hidden=!S.year;
  document.documentElement.style.setProperty("--ahp",ACC);
  var box=$("rows");box.innerHTML="";refs=[];
@@ -1971,7 +1995,11 @@ $("back").onclick=function(){
   else if(viewReturnTo==="tops") renderTops();
   else home();
 };
-$("artistBack").onclick=function(){ renderTops(); };
+$("artistBack").onclick=function(){
+  if(artistFrom==="album" && artistFromAlbum && L.indexOf(artistFromAlbum)>=0) openAlbum(artistFromAlbum, artistFromRet);
+  else if(artistFrom==="home") home();
+  else renderTops();
+};
 $("edit").onclick=function(){
   editing=true;
   $("setupTitle").textContent="Редактировать релиз";
@@ -2004,13 +2032,13 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("moreShe
 /* ——— СВАЙП ДЛЯ УДАЛЕНИЯ РЕЛИЗА ——— */
 var openSwipe=null,noFresh=false,toastT=null;
 function hideToast(){var t=$("toast");if(t)t.classList.remove("on")}
-function showToast(txt,label,cb){
+function showToast(txt,label,cb,ms){
   var t=$("toast");
   if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.innerHTML='<span id="toastTxt"></span><button type="button" id="toastBtn"></button>';document.body.appendChild(t)}
   $("toastTxt").textContent=txt;
-  var b=$("toastBtn");b.textContent=label;b.onclick=function(){hideToast();if(cb)cb()};
+  var b=$("toastBtn");b.textContent=label||"";b.hidden=!label;b.onclick=function(){hideToast();if(cb)cb()};
   void t.offsetWidth;t.classList.add("on");
-  clearTimeout(toastT);toastT=setTimeout(hideToast,6000)}
+  clearTimeout(toastT);toastT=setTimeout(hideToast,ms||6000)}
 function removeAlbum(a,wrap){
   var idx=L.indexOf(a);if(idx<0)return;
   haptic("heavy");
@@ -2319,7 +2347,6 @@ function glass(c,x,y,w,h,r,tint){
  c.save();rp(c,x,y,w,h,r);c.clip();
  var g=c.createLinearGradient(x,y,x+w*.6,y+h*.6);g.addColorStop(0,"rgba(255,255,255,.15)");g.addColorStop(.48,"rgba(255,255,255,0)");
  c.fillStyle=g;c.fillRect(x,y,w,h);
- if(tint!=null){var tg=c.createRadialGradient(x,y,0,x,y,Math.max(w,h)*.85);tg.addColorStop(0,"hsla("+tint+",75%,60%,.28)");tg.addColorStop(1,"hsla("+tint+",75%,60%,0)");c.fillStyle=tg;c.fillRect(x,y,w,h)}
  var t=c.createLinearGradient(0,y,0,y+6);t.addColorStop(0,"rgba(255,255,255,.34)");t.addColorStop(1,"rgba(255,255,255,0)");
  c.fillStyle=t;c.fillRect(x,y,w,6);c.restore();
  rp(c,x+1,y+1,w-2,h-2,r-1);c.strokeStyle="rgba(255,255,255,.22)";c.lineWidth=2;c.stroke()}
@@ -2329,7 +2356,6 @@ function glassSoft(c,x,y,w,h,r,tint){
  c.save();rp(c,x,y,w,h,r);c.clip();
  var g=c.createLinearGradient(x,y,x+w*.55,y+h*.5);g.addColorStop(0,"rgba(255,255,255,.10)");g.addColorStop(.5,"rgba(255,255,255,.02)");g.addColorStop(1,"rgba(255,255,255,0)");
  c.fillStyle=g;c.fillRect(x,y,w,h);
- if(tint!=null){var tg=c.createRadialGradient(x,y,0,x,y,Math.max(w,h)*.85);tg.addColorStop(0,"hsla("+tint+",75%,60%,.18)");tg.addColorStop(1,"hsla("+tint+",75%,60%,0)");c.fillStyle=tg;c.fillRect(x,y,w,h)}
  var t=c.createLinearGradient(0,y,0,y+5);t.addColorStop(0,"rgba(255,255,255,.22)");t.addColorStop(1,"rgba(255,255,255,0)");
  c.fillStyle=t;c.fillRect(x,y,w,5);c.restore();
  rp(c,x+.5,y+.5,w-1,h-1,r-1);c.strokeStyle="rgba(255,255,255,.16)";c.lineWidth=1.5;c.stroke()}
@@ -2410,14 +2436,11 @@ function drawCard(){
  c.fillStyle="#09090c";c.fillRect(0,0,Wd,H);
  var rg=c.createRadialGradient(Wd/2,0,0,Wd/2,0,Wd*.95);rg.addColorStop(0,"#262634");rg.addColorStop(1,"rgba(9,9,12,0)");
  c.fillStyle=rg;c.fillRect(0,0,Wd,H);
- var g1=c.createRadialGradient(0,0,0,0,0,Wd*1.05);g1.addColorStop(0,"hsla("+ah+",70%,50%,.30)");g1.addColorStop(1,"hsla("+ah+",70%,50%,0)");
- c.fillStyle=g1;c.fillRect(0,0,Wd,H);
- var ah2=(ah+45)%360,g2=c.createRadialGradient(Wd,H,0,Wd,H,Wd*1.1);g2.addColorStop(0,"hsla("+ah2+",70%,50%,.2)");g2.addColorStop(1,"hsla("+ah2+",70%,50%,0)");
- c.fillStyle=g2;c.fillRect(0,0,Wd,H);
+ 
 
  drawBrand(c, Wd - M, M + 12);
 
- glassSoft(c,M,y0,w,hh,56,ah);
+ glassSoft(c,M,y0,w,hh,56);
  var x0=M+Q,y=y0+Q+Math.round((hh-2*Q-tb)/2);c.textAlign="left";
  if(hasArt){c.fillStyle="#b4adc6";c.font="600 32px "+ff;c.fillText(fitT(c,art,tw),x0,y+30);y+=46}
  c.fillStyle="#f6f3fb";c.font="800 58px "+ff;
@@ -2428,7 +2451,7 @@ function drawCard(){
  drawRing(c,M+w-Q-RS/2,y0+hh/2,RS/2-14,22,tot,fu);
 
  var ty0=y0+hh+G;
- glassSoft(c,M,ty0,w,th,48,ah);
+ glassSoft(c,M,ty0,w,th,48);
  var curY = ty0 + 36;
  if(critRows.length){
   var cols = 3, gap = 24;
@@ -2512,8 +2535,23 @@ $("sv").onclick=async function(){var h=$("hint");
  }catch(e){if(!e||e.code!=="declined")h.textContent="Не удалось сохранить: нажми и удерживай картинку."}};
 $("sh").onclick=async function(){try{if(cardBlob)await navigator.share({files:[new File([cardBlob],fname(),{type:"image/png"})]})}catch(e){}};
 
+// сохранение файла через временную ссылку (имя файла, Blob)
+function download(name, blob){
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1500);
+}
+
 /* ——— КАРТОЧКА ТОПА ——— */
-function drawTopCard(mode){
+// Размер строго 1080×1920. Общая карточка при длинном топе делится на несколько страниц поровну (до 34 строк на страницу).
+var PAGE_ROWS = 34;
+var topPages = [], topPageIdx = 0;
+
+function drawTopPage(mode, panels, pg, total, rowsOnPage){
   var Wd=1080, H=1920, M=48, G=24;
   var cv = document.createElement("canvas");
   cv.width = Wd; cv.height = H;
@@ -2521,26 +2559,30 @@ function drawTopCard(mode){
   var ff="'Manrope', Arial, sans-serif",fu="'Unbounded', Arial, sans-serif";
 
   c.fillStyle = "#09090c"; c.fillRect(0,0,Wd,H);
-  var ahp = document.documentElement.style.getPropertyValue("--ahp") || 265;
-  var g1 = c.createRadialGradient(0,0,0,0,0,Wd*1.05); g1.addColorStop(0, "hsla("+ahp+",70%,50%,.30)"); g1.addColorStop(1, "hsla("+ahp+",70%,50%,0)");
-  c.fillStyle = g1; c.fillRect(0,0,Wd,H);
-  var g2 = c.createRadialGradient(Wd,H,0,Wd,H,Wd*1.1); g2.addColorStop(0, "hsla("+((+ahp+45)%360)+",70%,50%,.2)"); g2.addColorStop(1, "hsla("+((+ahp+45)%360)+",70%,50%,0)");
-  c.fillStyle = g2; c.fillRect(0,0,Wd,H);
+  var rg = c.createRadialGradient(Wd/2,0,0,Wd/2,0,Wd*.95); rg.addColorStop(0,"#262634"); rg.addColorStop(1,"rgba(9,9,12,0)");
+  c.fillStyle = rg; c.fillRect(0,0,Wd,H);
 
   drawBrand(c, Wd - M, M + 12);
 
-  var titleStr = mode === 'all' ? "Топ" : (mode === 'album' ? "Альбомы" : (mode === 'track' ? "Треки" : "Артисты"));
+  var isAllMode = mode === 'all';
+  var titleStr = isAllMode ? (topLimit ? "Топ " + topLimit : "Топ") : (mode === 'album' ? "Альбомы" : (mode === 'track' ? "Треки" : "Артисты"));
   var Y_Head = M + 32;
-  var headH = mode === 'all' ? 88 : 110;
+  var headH = isAllMode ? 88 : 110;
   var Y_List = M + headH + 32;
   var maxPanelH = H - Y_List - M;
+  var yTitle = Y_Head + (isAllMode ? 56 : 72);
 
-  c.fillStyle="#f6f3fb"; c.font="800 64px "+fu;
-  c.fillText(titleStr, M, Y_Head + (mode === 'all' ? 56 : 72));
-  if(topYearFilter || topDecade){
-    var sub = topYearFilter ? String(topYearFilter) : decLabel(topDecade);
+  c.fillStyle="#f6f3fb"; c.font="800 64px "+fu; c.textAlign="left";
+  c.fillText(titleStr, M, yTitle);
+  var subs = [];
+  if(!isAllMode && topLimit) subs.push("Топ " + topLimit);
+  if(topYearFilter || topDecade) subs.push(topYearFilter ? String(topYearFilter) : decLabel(topDecade));
+  if(total > 1) subs.push(pg + "/" + total);
+  if(subs.length){
     c.fillStyle="rgba(255,255,255,0.4)"; c.font="600 26px "+ff;
-    c.fillText(sub, M + c.measureText(titleStr).width + 28, Y_Head + (mode === 'all' ? 56 : 72));
+    c.font="800 64px "+fu; var tw = c.measureText(titleStr).width;
+    c.font="600 26px "+ff;
+    c.fillText(subs.join(" · "), M + tw + 28, yTitle);
   }
 
   function typeScale(count, isAll){
@@ -2556,10 +2598,9 @@ function drawTopCard(mode){
     return Math.max(0.72, Math.min(1.2, t));
   }
 
-  function layout(items, type, width, isAll){
-    var limit = isAll ? 10 : (topLimit || 100);
-    var count = Math.min(items.length, limit);
-    var sc = typeScale(count, isAll);
+  function layout(items, type, width, isAll, scCount){
+    var count = items.length;
+    var sc = typeScale(scCount || count, isAll);
     var padTop = Math.round((isAll ? 52 : 32) * Math.min(1, sc + 0.05));
     var padBot = Math.round(22 * sc);
     var padX = Math.round((isAll ? 28 : 36) * Math.min(1.05, sc));
@@ -2575,7 +2616,7 @@ function drawTopCard(mode){
     var needH = padTop + perCol * idealRH + padBot;
     var RH = idealRH;
     if(count > 0 && needH > maxPanelH){
-      RH = Math.max(34, Math.floor((maxPanelH - padTop - padBot) / perCol));
+      RH = Math.max(30, Math.floor((maxPanelH - padTop - padBot) / perCol));
       needH = padTop + perCol * RH + padBot;
     }
     if(count === 0) needH = padTop + 40;
@@ -2589,7 +2630,7 @@ function drawTopCard(mode){
     return {count:count, cols:cols, perCol:perCol, RH:RH, panelH:panelH, padTop:padTop, padX:padX, gapX:gapX, colW:colW, titleSize:titleSize, subSize:subSize, badgeW:badgeW, badgeH:badgeH, scoreSize:scoreSize, sc:sc};
   }
 
-  function drawItems(items, cX, cY, type, L){
+  function drawItems(items, cX, cY, type, L, offset){
     if(!L.count) return;
     var hasSub = type !== 'artist';
     var RH = L.RH;
@@ -2620,65 +2661,104 @@ function drawTopCard(mode){
       var textCy = itemY + RH / 2;
       c.textAlign = "left";
       c.fillStyle = "#f6f3fb"; c.font = "700 " + titleSize + "px " + ff;
+      var num = (offset || 0) + i + 1;
       if(hasSub && subTxt){
-        c.fillText(fitT(c, (i + 1) + ". " + title, maxW), itemX, textCy - Math.round(4 * (L.sc || 1)));
+        c.fillText(fitT(c, num + ". " + title, maxW), itemX, textCy - Math.round(4 * (L.sc || 1)));
         c.fillStyle = "rgba(255,255,255,0.45)"; c.font = "600 " + subSize + "px " + ff;
         c.fillText(fitT(c, subTxt, maxW), itemX, textCy + subSize + Math.round(2 * (L.sc || 1)));
       } else {
-        c.fillText(fitT(c, (i + 1) + ". " + title, maxW), itemX, textCy + titleSize * 0.35);
+        c.fillText(fitT(c, num + ". " + title, maxW), itemX, textCy + titleSize * 0.35);
       }
     }
   }
 
-  if(mode === 'all'){
-    var pW = (Wd - 2 * M - 2 * G) / 3;
-    var panels = [
-      { title: "Альбомы", data: topData.albums, type: 'album' },
-      { title: "Треки", data: topData.tracks, type: 'track' },
-      { title: "Артисты", data: topData.artists, type: 'artist' }
-    ];
-    var layouts = panels.map(function(p){ return layout(p.data, p.type, pW, true); });
+  if(isAllMode){
+    var m = panels.length;
+    var pW = (Wd - 2 * M - (m - 1) * G) / m;
     panels.forEach(function(p, idx){
       var px = M + idx * (pW + G);
-      var L = layouts[idx];
+      var L = layout(p.data, p.type, pW, true, rowsOnPage);
       glassSoft(c, px, Y_List, pW, L.panelH, 40);
-      c.fillStyle = "rgba(255,255,255,0.4)"; c.font = "700 18px " + ff;
+      c.textAlign = "left"; c.fillStyle = "rgba(255,255,255,0.4)"; c.font = "700 18px " + ff;
       c.fillText(p.title, px + 28, Y_List + 36);
-      drawItems(p.data, px, Y_List, p.type, L);
+      drawItems(p.data, px, Y_List, p.type, L, p.offset);
     });
   } else {
-    var items = mode === 'album' ? topData.albums : (mode === 'track' ? topData.tracks : topData.artists);
-    var panelW = Wd - 2 * M;
-    var panelX = M;
-    var L = layout(items, mode, panelW, false);
-    glassSoft(c, panelX, Y_List, panelW, L.panelH, 40);
-    drawItems(items, panelX, Y_List, mode, L);
+    var p0 = panels[0], panelW = Wd - 2 * M;
+    var L0 = layout(p0.data, mode, panelW, false);
+    glassSoft(c, M, Y_List, panelW, L0.panelH, 40);
+    drawItems(p0.data, M, Y_List, mode, L0, 0);
   }
   return cv;
 }
 
-function fnameTop(){return "ratepiece-top-"+topCardMode+".png"}
+// Возвращает массив страниц (канвасов 1080×1920)
+function drawTopCards(mode){
+  var lim = topLimit || 300;
+  var A = topData.albums.slice(0, lim), T = topData.tracks.slice(0, lim), R = topData.artists.slice(0, lim);
+  if(mode !== 'all'){
+    var items = mode === 'album' ? A : (mode === 'track' ? T : R);
+    return [drawTopPage(mode, [{title:null, data:items, type:mode, offset:0}], 1, 1, items.length)];
+  }
+  var maxc = Math.max(A.length, T.length, R.length, 1);
+  var P = Math.max(1, Math.ceil(maxc / PAGE_ROWS));
+  var base = Math.floor(maxc / P), rem = maxc % P;
+  var bounds = [0];
+  for(var k = 0; k < P; k++) bounds.push(bounds[k] + base + (k < rem ? 1 : 0));
+  var pages = [];
+  for(var k2 = 0; k2 < P; k2++){
+    var from = bounds[k2], to = bounds[k2 + 1], panels = [];
+    [["Альбомы", A, "album"], ["Треки", T, "track"], ["Артисты", R, "artist"]].forEach(function(d){
+      var part = d[1].slice(from, to);
+      if(part.length) panels.push({title:d[0], data:part, type:d[2], offset:from});
+    });
+    pages.push(drawTopPage('all', panels, k2 + 1, P, to - from));
+  }
+  return pages;
+}
 
+function fnameTop(i){
+  var n = topPages.length, idx = (i == null ? topPageIdx : i);
+  return "ratepiece-top-" + topCardMode + (topLimit ? "-" + topLimit : "") + (n > 1 ? "-" + (idx + 1) + "of" + n : "") + ".png";
+}
+function updateShareTop(){
+  try{
+    var files = topPages.filter(function(p){return p.blob}).map(function(p, i){return new File([p.blob], fnameTop(i), {type:"image/png"})});
+    $("shTop").hidden = !(files.length && navigator.canShare && navigator.canShare({files:files}));
+  }catch(e){ $("shTop").hidden = true; }
+}
+function showTopPage(){
+  var n = topPages.length; if(!n) return;
+  topPageIdx = Math.max(0, Math.min(n - 1, topPageIdx));
+  $("imgTop").style.display = "";
+  $("imgTop").src = topPages[topPageIdx].url;
+  $("tpPager").hidden = n < 2;
+  $("tpCnt").textContent = (topPageIdx + 1) + " / " + n;
+  $("tpPrev").disabled = topPageIdx === 0;
+  $("tpNext").disabled = topPageIdx === n - 1;
+  $("shTop").textContent = n > 1 ? "Поделиться всеми" : "Поделиться";
+  $("hintTop").textContent = n > 1
+    ? "Листай свайпом. «Сохранить» сохраняет текущую страницу, «Поделиться всеми» отправляет все."
+    : "Если сохранение не сработает, нажми и удерживай картинку.";
+}
 function openTopCard() {
+  if(!topLimit){ haptic("error"); showToast("Выбери Топ 10, 20, 50 или 100", "", null, 2600); return; }
   haptic("medium");
   var go = function() {
     try {
-      var cv = drawTopCard(topCardMode);
-      var dataUrl = cv.toDataURL("image/png");
-      $("imgTop").style.display = "";
-      $("imgTop").src = dataUrl;
-      $("hintTop").textContent = "Если сохранение не сработает, нажми и удерживай картинку.";
+      var cvs = drawTopCards(topCardMode);
+      topPages = cvs.map(function(cv){ return {url: cv.toDataURL("image/png"), blob: null}; });
+      topPageIdx = 0;
+      showTopPage();
       $("ovTop").hidden = false;
       $("ovTop").scrollTop = 0;
       document.body.style.overflow = "hidden";
-      
-      cv.toBlob(function(b) {
-        if (!b) { cardBlobTop = null; return; }
-        cardBlobTop = b;
-        try { $("shTop").hidden = !(navigator.canShare && navigator.canShare({files:[new File([b],fnameTop(),{type:"image/png"})]})); } catch(e) { $("shTop").hidden = true; }
-      }, "image/png");
+      Promise.all(cvs.map(function(cv){ return new Promise(function(res){ cv.toBlob(res, "image/png"); }); })).then(function(bl){
+        bl.forEach(function(b, i){ if(topPages[i]) topPages[i].blob = b; });
+        updateShareTop();
+      });
     } catch(e) {
-      cardBlobTop = null;
+      topPages = [];
       $("imgTop").removeAttribute("src");
       $("imgTop").style.display = "none";
       $("hintTop").textContent = "Не удалось создать карточку.";
@@ -2686,7 +2766,6 @@ function openTopCard() {
       document.body.style.overflow = "hidden";
     }
   };
-
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function(){ setTimeout(go, 60); });
   } else {
@@ -2704,7 +2783,7 @@ $("topCardModes").onclick = function(e) {
     b.classList.toggle("on", b.getAttribute("data-mode") === topCardMode);
     b.classList.toggle("p", b.getAttribute("data-mode") === topCardMode);
   });
-  openTopCard(); 
+  openTopCard();
 };
 
 function closeOvTop() {
@@ -2712,28 +2791,44 @@ function closeOvTop() {
   document.body.style.overflow = "";
   $("imgTop").removeAttribute("src");
 }
-
 $("clTop").onclick = closeOvTop;
+$("tpPrev").onclick = function(){ topPageIdx--; showTopPage(); };
+$("tpNext").onclick = function(){ topPageIdx++; showTopPage(); };
 document.addEventListener("keydown", function(e) {
-  if (e.key === "Escape" && !$("ovTop").hidden) closeOvTop();
+  if ($("ovTop").hidden) return;
+  if (e.key === "Escape") closeOvTop();
+  else if (e.key === "ArrowRight" && topPages.length > 1) { topPageIdx++; showTopPage(); }
+  else if (e.key === "ArrowLeft" && topPages.length > 1) { topPageIdx--; showTopPage(); }
 });
+(function(){
+  var sx = 0, sy = 0, ok = false, box = $("ovTop");
+  box.addEventListener("touchstart", function(e){ var t = e.touches[0]; sx = t.clientX; sy = t.clientY; ok = !!e.target.closest("#imgTop"); }, {passive:true});
+  box.addEventListener("touchend", function(e){
+    if (!ok || topPages.length < 2) return; ok = false;
+    var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > 1.5 * Math.abs(dy)) { topPageIdx += (dx < 0 ? 1 : -1); showTopPage(); }
+  }, {passive:true});
+})();
 
 $("svTop").onclick = async function() {
-  var h = $("hintTop");
+  var h = $("hintTop"), p = topPages[topPageIdx];
   try {
-    if (!cardBlobTop) { h.textContent = "Карточка ещё не готова."; return; }
+    if (!p || !p.blob) { h.textContent = "Карточка ещё не готова."; return; }
     if (typeof claude !== "undefined") {
       var d = await claude.use("downloads");
-      if (d) { await d.save({filename:fnameTop(), data:cardBlobTop}); return; }
+      if (d) { await d.save({filename:fnameTop(), data:p.blob}); return; }
     }
-    await download(fnameTop(), cardBlobTop);
+    await download(fnameTop(), p.blob);
   } catch(e) {
     if (!e || e.code !== "declined") h.textContent = "Не удалось сохранить: нажми и удерживай картинку.";
   }
 };
 
 $("shTop").onclick = async function() {
-  try { if (cardBlobTop) await navigator.share({files:[new File([cardBlobTop], fnameTop(), {type:"image/png"})]}); } catch(e){}
+  try {
+    var files = topPages.filter(function(p){return p.blob}).map(function(p, i){ return new File([p.blob], fnameTop(i), {type:"image/png"}); });
+    if (files.length) await navigator.share({files:files});
+  } catch(e){}
 };
 
 /* ——— СКОЛЬЗЯЩИЙ ИНДИКАТОР (GLIDE PILL) ДЛЯ ТАБОВ И ФИЛЬТРОВ ——— */
